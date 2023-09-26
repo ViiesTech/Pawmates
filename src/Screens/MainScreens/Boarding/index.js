@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import FastImage from "react-native-fast-image";
 import images from "../../../Constants/images";
 import Headertext from "../../../Components/HeaderText";
@@ -8,8 +8,12 @@ import InnerButton from "../../../Components/innerButton";
 import InputField from "../../../Components/InputFiled";
 import CustomButton from "../../../Components/Button";
 import { COLORS } from "../../../Constants/theme";
+import DatePicker from "react-native-date-picker";
 
 const Boarding = ({ navigation }) => {
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
       <Headertext />
@@ -17,11 +21,22 @@ const Boarding = ({ navigation }) => {
         <Text style={styles.header}>Boarding near</Text>
 
         <InputField placeholder={"Zip Code or address"} />
-
+        <DatePicker
+          modal
+          open={open}
+          date={date}
+          onConfirm={(date) => {
+            setOpen(false);
+            setDate(date);
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
         <InnerButton
           buttonText={"Drop off"}
-          onPress={() => navigation.navigate("WhichAnimal")}
-           Lefticon={true}
+          onPress={() => setOpen(true)}
+          Lefticon={true}
           name="calendar"
           type={"feather"}
           color={COLORS.black}
@@ -29,7 +44,7 @@ const Boarding = ({ navigation }) => {
         />
         <InnerButton
           buttonText={"Pick up"}
-          onPress={() => navigation.navigate("WhichAnimal")}
+          onPress={() => setOpen(true)}
           Lefticon={true}
           name="calendar"
           type={"feather"}
@@ -39,9 +54,8 @@ const Boarding = ({ navigation }) => {
 
         <View style={{ height: 30 }} />
       </View>
-      <View style={{ height: '28%' }} />
 
-      <View style={{ alignItems: "flex-end" }}>
+      <View style={styles.btn_view}>
         <CustomButton
           buttonText={"Continue"}
           style={{ borderRadius: 25 }}

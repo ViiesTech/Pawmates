@@ -25,9 +25,9 @@ export const styles = StyleSheet.create({
     marginTop:30
   },
   errors: {
-    fontSize: 14,
+    fontSize: 11,
     fontWeight: "bold",
-    color: "white",
+    color: "red",
     marginTop: 5,
   },
 });

@@ -1,6 +1,5 @@
 import { View, Image, Text } from "react-native";
 import React, { useState } from "react";
-
 import { forgetPasswordValidationSchema } from "../../../Utills/Validations";
 import CustomText from "../../../Components/Text";
 import BackButton from "../../../Components/Back Button";
@@ -11,15 +10,18 @@ import { Formik } from "formik";
 import CustomButton from "../../../Components/Button";
 import InputField from "../../../Components/InputFiled";
 
-const ForgetPassword = ({navigation}) => {
+const ForgetPassword = ({ navigation }) => {
+  const forgetUserPassword = () => {
+    navigation.navigate("Otp");
+  };
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
       <Formik
         initialValues={{ email: "" }}
         validateOnMount={true}
-        //   onSubmit={(values, { setValues }) =>
-        //     forgetUserPassword(values, { setValues })
-        //   }
+        onSubmit={(values, { setValues }) =>
+          forgetUserPassword(values, { setValues })
+        }
         validationSchema={forgetPasswordValidationSchema}
       >
         {({
@@ -54,8 +56,7 @@ const ForgetPassword = ({navigation}) => {
               <CustomButton
                 buttonText={"Submit"}
                 onPress={() => {
-                  navigation.navigate("Otp");
-                  //   handleSubmit(values);
+                  handleSubmit(values);
                 }}
               />
             </View>

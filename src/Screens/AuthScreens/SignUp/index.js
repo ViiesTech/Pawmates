@@ -26,7 +26,7 @@ const SignUp = ({ navigation }) => {
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
         <BackButton onPressBack={() => navigation.goBack()} />
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 }} >
         <View style={{ height: 100 }}></View>
         <Formik
           initialValues={{
@@ -63,7 +63,7 @@ const SignUp = ({ navigation }) => {
                   onChangeText={handleChange("name")}
                 />
                 {errors.name && touched.name && (
-                  <CustomText text={errors.name} />
+                  <CustomText text={errors.name} style={styles.errors} />
                 )}
                 <InputField
                   placeholder={"Email Address"}
@@ -72,7 +72,7 @@ const SignUp = ({ navigation }) => {
                   onChangeText={handleChange("email")}
                 />
                 {errors.email && touched.email && (
-                  <CustomText text={errors.email} />
+                  <CustomText text={errors.email} style={styles.errors} />
                 )}
                 <InputField
                   placeholder={"password"}
@@ -82,7 +82,7 @@ const SignUp = ({ navigation }) => {
                   secureTextEntry
                 />
                 {errors.password && touched.password && (
-                  <CustomText text={errors.password} />
+                  <CustomText text={errors.password} style={styles.errors}/>
                 )}
 
                 <InputField
@@ -93,7 +93,7 @@ const SignUp = ({ navigation }) => {
                   secureTextEntry
                 />
                 {errors.confirmPassword && touched.confirmPassword && (
-                  <CustomText text={errors.confirmPassword} />
+                  <CustomText text={errors.confirmPassword}  style={styles.errors}/>
                 )}
                 <View style={styles.checkView}>
                   <RadioButton

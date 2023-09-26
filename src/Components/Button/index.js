@@ -18,6 +18,7 @@ const CustomButton = ({
   <>
   
     <TouchableOpacity
+    activeOpacity={0.7}
       onPress={onPress}
       style={[styles.container, style]}
       disabled={isDisabled}

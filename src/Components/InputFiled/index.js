@@ -1,6 +1,7 @@
-import React from "react";
-import { StyleSheet, TextInput } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, TextInput, View,TouchableOpacity } from "react-native";
 import { COLORS } from "../../Constants/theme";
+import Feather from "react-native-vector-icons/Feather";
 
 const InputField = ({
   style,
@@ -17,27 +18,44 @@ const InputField = ({
   returnKeyType,
   multiline,
   textContentType,
+  icon,
 }) => {
+  const [passwordHide, setpasswordHide] = useState(true);
+
   return (
-    <TextInput
-      ref={ref}
-      value={value}
-      onChangeText={onChangeText}
-      keyboardType={keyboardType}
-      placeholder={placeholder}
-      secureTextEntry={secureText}
-      style={[styles.input, style]}
-      placeholderTextColor={"#949494"}
-      defaultValue={defaultValue}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      editable={isEdit}
-      returnKeyType={returnKeyType}
-      underlineColorAndroid="transparent"
-      multiline={multiline}
-      textContentType={textContentType}
-      cursorColor={COLORS.black}
-    />
+    <View>
+      <TextInput
+        ref={ref}
+        value={value}
+        onChangeText={onChangeText}
+        keyboardType={keyboardType}
+        placeholder={placeholder}
+        secureTextEntry={passwordHide}
+        style={[styles.input, style]}
+        placeholderTextColor={"#949494"}
+        defaultValue={defaultValue}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        editable={isEdit}
+        returnKeyType={returnKeyType}
+        underlineColorAndroid="transparent"
+        multiline={multiline}
+        textContentType={textContentType}
+        cursorColor={COLORS.black}
+      />
+      {icon && (
+        <TouchableOpacity
+          style={styles.Righticon}
+          onPress={() => setpasswordHide(!passwordHide)}
+        >
+          {passwordHide ? (
+            <Feather name="eye" size={22} color={"gray"} />
+          ) : (
+            <Feather name="eye-off" size={22} color={"gray"} />
+          )}
+        </TouchableOpacity>
+      )}
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -51,6 +69,12 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: COLORS.black,
     opacity: 0.8,
+  },
+  Righticon: {
+    position: "absolute",
+    alignSelf: "flex-end",
+    padding: 15,
+    marginTop: 20,
   },
 });
 

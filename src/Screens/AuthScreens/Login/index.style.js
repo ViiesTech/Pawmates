@@ -42,9 +42,9 @@ export const styles = StyleSheet.create({
     color:COLORS.text_white
   },
   errors: {
-    fontSize: 14,
+    fontSize: 11,
     fontWeight: "bold",
-    color: "white",
+    color: "red",
     marginTop: 5,
   },
   checkView: {

@@ -39,4 +39,10 @@ export const styles = StyleSheet.create({
     fontSize:11,
    
   },
+  errors: {
+    fontSize: 11,
+    fontWeight: "bold",
+    color: "red",
+    marginTop: 5,
+  },
 });

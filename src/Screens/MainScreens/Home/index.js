@@ -4,7 +4,7 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
-  Image
+  Image,
 } from "react-native";
 import React from "react";
 import FastImage from "react-native-fast-image";
@@ -95,14 +95,14 @@ const Home = () => {
               data={Data}
               renderItem={({ item }) => {
                 return (
-                  <View style={{marginHorizontal:10, marginTop:15}}>
+                  <View style={{ marginHorizontal: 10, marginTop: 15 }}>
                     <TouchableOpacity style={styles.Data_View}>
                       {/* <CustomText
                         text={item.title}
                         style={{ marginHorizontal: 6, fontSize: 13 }}
                       />
                       <CustomText text={item.size} /> */}
-                      <Image source={item.image}/>
+                      <Image source={item.image} />
                     </TouchableOpacity>
                   </View>
                 );

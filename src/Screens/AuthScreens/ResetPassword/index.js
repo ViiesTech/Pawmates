@@ -11,21 +11,18 @@ import { resetPasswordValidationSchema } from "../../../Utills/Validations";
 import Toast from "react-native-toast-message";
 import { styles } from "./index.style";
 
-
-
 const ResetPassword = ({ navigation, route }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
 
-//   const { itemId, id } = route.params;
+  //   const { itemId, id } = route.params;
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-
-  // API
-  
-
+  const resetPassword = ({values}) => {
+    navigation.navigate("Login");
+  };
   const showToast = (type, msg) => {
     Toast.show({
       type: type,
@@ -44,9 +41,9 @@ const ResetPassword = ({ navigation, route }) => {
             confirmPassword: "",
           }}
           validateOnMount={true}
-        //   onSubmit={(values, { setSubmitting, setValues }) =>
-        //     resetPassword(values, { setSubmitting, setValues })
-        //   }
+            onSubmit={(values, { setSubmitting, setValues }) =>
+              resetPassword(values, { setSubmitting, setValues })
+            }
           validationSchema={resetPasswordValidationSchema}
         >
           {({
@@ -68,31 +65,34 @@ const ResetPassword = ({ navigation, route }) => {
                 value={values.password}
                 onBlur={handleBlur("password")}
                 onChangeText={handleChange("password")}
-                secureTextEntry
+                secureTextEntry={true}
+                icon={true}
               />
-              {/* {errors.password && touched.password && (
-                <CustomText text={errors.password} />
-              )} */}
+              {errors.password && touched.password && (
+                <CustomText text={errors.password} style={styles.errors} />
+              )}
 
               <InputField
                 placeholder={"Re-type Password"}
                 value={values.confirmPassword}
                 onChangeText={handleChange("confirmPassword")}
                 onBlur={handleBlur("confirmPassword")}
-                secureTextEntry
+                secureTextEntry={true}
+                icon={true}
               />
               {errors.confirmPassword && touched.confirmPassword && (
-                <CustomText text={errors.confirmPassword} />
-              )}
-           
-                <CustomButton
-                  buttonText={"Submit"}
-                  onPress={() => {
-                    // handleSubmit(values);
-                    navigation.navigate('Login')
-                  }}
+                <CustomText
+                  text={errors.confirmPassword}
+                  style={styles.errors}
                 />
-      
+              )}
+
+              <CustomButton
+                buttonText={"Submit"}
+                onPress={() => {
+                  handleSubmit(values);
+                }}
+              />
             </View>
           )}
         </Formik>

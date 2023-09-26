@@ -13,11 +13,16 @@ import { Formik } from "formik";
 import InputField from "../../../Components/InputFiled";
 import { COLORS } from "../../../Constants/theme";
 
-const LogIn = ({navigation}) => {
+const LogIn = ({ navigation }) => {
   const [checked, setChecked] = useState("first");
   const handleRadioButtonChange = (value) => {
     setChecked(value);
   };
+
+  const LogInUser = () => {
+    navigation.navigate("MainStack");
+  };
+
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
       <View style={{ height: 100 }}></View>
@@ -25,9 +30,9 @@ const LogIn = ({navigation}) => {
         <Formik
           initialValues={{ email: "", password: "" }}
           validateOnMount={true}
-          //   onSubmit={(values, { setSubmitting, setValues }) =>
-          //     LogInUser(values, { setSubmitting, setValues })
-          //   }
+          onSubmit={(values, { setSubmitting, setValues }) =>
+            LogInUser(values, { setSubmitting, setValues })
+          }
           validationSchema={logInValidationSchema}
         >
           {({
@@ -47,9 +52,9 @@ const LogIn = ({navigation}) => {
                 />
                 <InputField
                   placeholder={"username or email"}
-                  //   value={values.email}
-                  //   onChangeText={handleChange("email")}
-                  //   onBlur={handleBlur("email")}
+                  value={values.email}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
                   keyboardType={"email-address"}
                 />
                 {errors.email && touched.email && (
@@ -57,21 +62,18 @@ const LogIn = ({navigation}) => {
                 )}
                 <InputField
                   placeholder={"password"}
-                  //   value={values.password}
-                  //   onChangeText={handleChange("password")}
-                  //   onBlur={handleBlur("password")}
-                  secureTextEntry
+                  value={values.password}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  secureTextEntry={true}
+                  icon={true}
                 />
                 {errors.password && touched.password && (
-                  <Text
-                    style={[styles.errors, { paddingBottom: 5, marginTop: 0 }]}
-                  >
-                    {errors.password}
-                  </Text>
+                  <CustomText text={errors.password} style={styles.errors} />
                 )}
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate('ForgetPassword');
+                    navigation.navigate("ForgetPassword");
                   }}
                   style={{ alignSelf: "flex-end", marginTop: 10 }}
                 >
@@ -92,7 +94,7 @@ const LogIn = ({navigation}) => {
                     text={"Sign in as a Pet Owner "}
                     style={styles.termsText}
                   />
-                   <RadioButton
+                  <RadioButton
                     value="second"
                     color={COLORS.primary}
                     uncheckedColor="#949494"
@@ -114,8 +116,7 @@ const LogIn = ({navigation}) => {
                 <CustomButton
                   buttonText={"Sign In"}
                   onPress={() => {
-                    //   handleSubmit(values);
-                    navigation.navigate('MainStack')
+                    handleSubmit(values);
                   }}
                 />
 
@@ -125,7 +126,7 @@ const LogIn = ({navigation}) => {
                   style={{ alignSelf: "center", marginTop: 10 }}
                 >
                   <CustomText
-                    text={"Dont have an account?"}
+                    text={"Don't have an account?"}
                     style={{ fontSize: 14 }}
                   />
                 </TouchableOpacity>
