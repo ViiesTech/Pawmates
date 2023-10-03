@@ -7,6 +7,7 @@ import { styles } from "./index.style";
 import InnerButton from "../../../Components/innerButton";
 import CustomText from "../../../Components/Text";
 import CustomButton from "../../../Components/Button";
+import BackButton from "../../../Components/Back Button";
 
 const WhichAnimal = ({ navigation }) => {
   const Data = [
@@ -39,6 +40,7 @@ const WhichAnimal = ({ navigation }) => {
 
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
+      <BackButton onPressBack={() => navigation.goBack()} />
       <Headertext />
       <View style={styles.container}>
         <Text style={styles.header}>For When You're Away</Text>

@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
         borderRadius:20,
         justifyContent:'center',
         alignSelf:'center',
+        marginTop: 25
     },
     header:{
         alignSelf:'center',

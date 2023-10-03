@@ -79,7 +79,8 @@ const SignUp = ({ navigation }) => {
                   value={values.password}
                   onBlur={handleBlur("password")}
                   onChangeText={handleChange("password")}
-                  secureTextEntry
+                  secureText={true}
+                  icon={true}
                 />
                 {errors.password && touched.password && (
                   <CustomText text={errors.password} style={styles.errors}/>
@@ -90,7 +91,8 @@ const SignUp = ({ navigation }) => {
                   value={values.confirmPassword}
                   onChangeText={handleChange("confirmPassword")}
                   onBlur={handleBlur("confirmPassword")}
-                  secureTextEntry
+                  secureText={true}
+                  icon={true}
                 />
                 {errors.confirmPassword && touched.confirmPassword && (
                   <CustomText text={errors.confirmPassword}  style={styles.errors}/>

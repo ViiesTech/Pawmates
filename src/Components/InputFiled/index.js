@@ -7,7 +7,7 @@ const InputField = ({
   style,
   placeholder,
   onChangeText,
-  secureText,
+  secureText=false,
   keyboardType,
   defaultValue,
   onFocus,
@@ -20,7 +20,7 @@ const InputField = ({
   textContentType,
   icon,
 }) => {
-  const [passwordHide, setpasswordHide] = useState(true);
+  const [passwordHide, setpasswordHide] = useState(secureText);
 
   return (
     <View>

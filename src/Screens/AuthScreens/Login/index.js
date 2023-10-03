@@ -65,7 +65,7 @@ const LogIn = ({ navigation }) => {
                   value={values.password}
                   onChangeText={handleChange("password")}
                   onBlur={handleBlur("password")}
-                  secureTextEntry={true}
+                  secureText={true}
                   icon={true}
                 />
                 {errors.password && touched.password && (

@@ -6,10 +6,13 @@ import Headertext from "../../../Components/HeaderText";
 import { styles } from "./index.style";
 import InnerButton from "../../../Components/innerButton";
 import { COLORS } from "../../../Constants/theme";
+import BackButton from "../../../Components/Back Button";
 
 const Service = ({ navigation }) => {
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
+
+      <BackButton onPressBack={() => navigation.goBack()} />
       <Headertext />
       <View style={styles.container}>
         <Text style={styles.header}>

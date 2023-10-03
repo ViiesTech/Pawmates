@@ -9,13 +9,17 @@ import InputField from "../../../Components/InputFiled";
 import CustomButton from "../../../Components/Button";
 import { COLORS } from "../../../Constants/theme";
 import DatePicker from "react-native-date-picker";
+import BackButton from "../../../Components/Back Button";
 
 const Boarding = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [open, setOpen] = useState(false);
+  const [endOpen, setEndOpen] = useState(false);
 
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
+      <BackButton onPressBack={() => navigation.goBack()} />
       <Headertext />
       <View style={styles.container}>
         <Text style={styles.header}>Boarding near</Text>
@@ -33,8 +37,20 @@ const Boarding = ({ navigation }) => {
             setOpen(false);
           }}
         />
+        <DatePicker
+          modal
+          open={endOpen}
+          date={endDate}
+          onConfirm={(date) => {
+            setEndOpen(false);
+            setEndDate(date);
+          }}
+          onCancel={() => {
+            setEndOpen(false);
+          }}
+        />
         <InnerButton
-          buttonText={"Drop off"}
+          buttonText={date.toDateString()}
           onPress={() => setOpen(true)}
           Lefticon={true}
           name="calendar"
@@ -43,8 +59,8 @@ const Boarding = ({ navigation }) => {
           size={20}
         />
         <InnerButton
-          buttonText={"Pick up"}
-          onPress={() => setOpen(true)}
+          buttonText={endDate.toDateString()}
+          onPress={() => setEndOpen(true)}
           Lefticon={true}
           name="calendar"
           type={"feather"}

@@ -6,6 +6,7 @@ import Headertext from "../../../Components/HeaderText";
 import { styles } from "./index.style";
 import InnerButton from "../../../Components/innerButton";
 import { COLORS } from "../../../Constants/theme";
+import BackButton from "../../../Components/Back Button";
 
 const ForWhen = ({ navigation }) => {
   const [selectedButton, setSelectedButton] = useState(null);
@@ -16,6 +17,7 @@ const ForWhen = ({ navigation }) => {
 
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
+      <BackButton onPressBack={() => navigation.goBack()} />
       <Headertext />
       <View style={styles.container}>
         <Text style={styles.header}>
@@ -28,6 +30,7 @@ const ForWhen = ({ navigation }) => {
           }}
           onPress={() => {
             handleButtonClick("FARM ANIMALS");
+            navigation.navigate("Service");
           }}
         />
         <InnerButton
@@ -37,6 +40,7 @@ const ForWhen = ({ navigation }) => {
           }}
           onPress={() => {
             handleButtonClick("REPTILES");
+            navigation.navigate("Service");
           }}
         />
         <InnerButton
@@ -46,6 +50,7 @@ const ForWhen = ({ navigation }) => {
           }}
           onPress={() => {
             handleButtonClick("BIRDS");
+            navigation.navigate("Service");
           }}
         />
         <InnerButton
@@ -66,6 +71,7 @@ const ForWhen = ({ navigation }) => {
           }}
           onPress={() => {
             handleButtonClick("EXOTIC ANIMALS");
+            navigation.navigate("Service");
           }}
         />
         <View style={{ height: 20 }} />
