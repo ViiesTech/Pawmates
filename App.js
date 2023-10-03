@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, SafeAreaView } from 'react-native'
 import React, { useEffect } from 'react'
 import Route from './src/Navigation/Route'
 import SplashScreen from 'react-native-splash-screen'
@@ -12,8 +12,10 @@ SplashScreen.hide();
 
 
   return (
+<SafeAreaView style={{flex:1}}>
 
-    <Route/>
+  <Route/>
+</SafeAreaView>
   )
 }
 
