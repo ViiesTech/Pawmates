@@ -61,6 +61,7 @@ const SignUp = ({ navigation }) => {
                   value={values.name}
                   onBlur={handleBlur("name")}
                   onChangeText={handleChange("name")}
+                  secureText={false}
                 />
                 {errors.name && touched.name && (
                   <CustomText text={errors.name} style={styles.errors} />
@@ -70,6 +71,8 @@ const SignUp = ({ navigation }) => {
                   value={values.email}
                   onBlur={handleBlur("email")}
                   onChangeText={handleChange("email")}
+                  secureText={false}
+
                 />
                 {errors.email && touched.email && (
                   <CustomText text={errors.email} style={styles.errors} />
@@ -81,6 +84,7 @@ const SignUp = ({ navigation }) => {
                   onChangeText={handleChange("password")}
                   secureText={true}
                   icon={true}
+
                 />
                 {errors.password && touched.password && (
                   <CustomText text={errors.password} style={styles.errors}/>
@@ -93,6 +97,7 @@ const SignUp = ({ navigation }) => {
                   onBlur={handleBlur("confirmPassword")}
                   secureText={true}
                   icon={true}
+
                 />
                 {errors.confirmPassword && touched.confirmPassword && (
                   <CustomText text={errors.confirmPassword}  style={styles.errors}/>

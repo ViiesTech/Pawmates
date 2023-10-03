@@ -56,6 +56,7 @@ const LogIn = ({ navigation }) => {
                   onChangeText={handleChange("email")}
                   onBlur={handleBlur("email")}
                   keyboardType={"email-address"}
+                  secureText={false}
                 />
                 {errors.email && touched.email && (
                   <Text style={styles.errors}>{errors.email}</Text>
@@ -67,6 +68,7 @@ const LogIn = ({ navigation }) => {
                   onBlur={handleBlur("password")}
                   secureText={true}
                   icon={true}
+
                 />
                 {errors.password && touched.password && (
                   <CustomText text={errors.password} style={styles.errors} />

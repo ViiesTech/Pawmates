@@ -13,8 +13,9 @@ import DROPINVISIT from '../Assets/Images/DROPINVISIT.png'
 import HOUSESITTING from '../Assets/Images/HOUSESITTING.png'
 import PETDAYCARE from '../Assets/Images/PETDAYCARE.png'
 import PETWALKING from '../Assets/Images/PETWALKING.png'
+import backGroundScreen from '../Assets/Images/backGroundScreen.png'
 
-
+backGroundScreen
 export default {
   AuthBackground,
   Facebook_Logo,
@@ -30,5 +31,6 @@ export default {
   DROPINVISIT,
   HOUSESITTING,
   PETDAYCARE,
-  PETWALKING
+  PETWALKING,
+  backGroundScreen
 }
