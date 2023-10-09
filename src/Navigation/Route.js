@@ -9,6 +9,10 @@ import { StatusBar } from "react-native";
 
 const Route = () => {
   const Stack = createStackNavigator();
+
+  const token = useSelector((state)=> state.authData.token)
+  console.log('tokeeeeeeen ==>>>>', token)
+
   const MyTheme = {
     ...DefaultTheme,
     colors: {
@@ -28,9 +32,14 @@ const Route = () => {
         screenOptions={{ headerShown: false }}
         initialRouteName="AuthStack"
       >
-        <Stack.Screen name="MainStack" component={MainStack} />
+        {token ? (
+
+          <Stack.Screen name="MainStack" component={MainStack} />
+        ):(
 
         <Stack.Screen name="AuthStack" component={AuthStack} />
+        )}
+
       </Stack.Navigator>
     </NavigationContainer>
   );

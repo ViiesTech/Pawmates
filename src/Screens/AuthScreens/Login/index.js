@@ -12,15 +12,48 @@ import images from "../../../Constants/images";
 import { Formik } from "formik";
 import InputField from "../../../Components/InputFiled";
 import { COLORS } from "../../../Constants/theme";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+// import { UserLogin } from "../../../Redux/authSlice";
+import LoaderModal from "../../../Components/LoaderModal";
+import BasUrl from "../../../BasUrl";
+import { UserLogin } from "../../../Redux/authSlice";
 
 const LogIn = ({ navigation }) => {
   const [checked, setChecked] = useState("first");
+  const [isLoader, setIsLoader] = useState(false);
+
+  const dispatch = useDispatch();
+
   const handleRadioButtonChange = (value) => {
     setChecked(value);
   };
+  const loading = useSelector((state)=> state.authData.isLoading)
+  console.log(loading)
 
-  const LogInUser = () => {
-    navigation.navigate("MainStack");
+  const LogInUser = async (values, { setSubmitting, setValues }) => {
+    setIsLoader(true);
+    let data = JSON.stringify({
+      email: values.email,
+      password: values.password,
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: `${BasUrl}/user/login`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+    dispatch(UserLogin(config));
+  };
+  const showToast = (type, msg) => {
+    Toast.show({
+      type: type,
+      text1: msg,
+    });
   };
 
   return (
@@ -68,7 +101,6 @@ const LogIn = ({ navigation }) => {
                   onBlur={handleBlur("password")}
                   secureText={true}
                   icon={true}
-
                 />
                 {errors.password && touched.password && (
                   <CustomText text={errors.password} style={styles.errors} />
@@ -114,13 +146,16 @@ const LogIn = ({ navigation }) => {
                     />
                   </TouchableOpacity> */}
                 </View>
-
-                <CustomButton
-                  buttonText={"Sign In"}
-                  onPress={() => {
-                    handleSubmit(values);
-                  }}
-                />
+                {isLoader ? (
+                  <LoaderModal />
+                ) : (
+                  <CustomButton
+                    buttonText={"Sign In"}
+                    onPress={() => {
+                      handleSubmit(values);
+                    }}
+                  />
+                )}
 
                 <View style={styles.devider_View} />
 

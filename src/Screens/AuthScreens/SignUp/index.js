@@ -12,10 +12,44 @@ import Toast from "react-native-toast-message";
 import CustomText from "../../../Components/Text";
 import CustomButton from "../../../Components/Button";
 import { COLORS } from "../../../Constants/theme";
-
+import BasUrl from "../../../BasUrl";
+import axios from "axios";
+import { setLocale } from "yup";
+import LoaderModal from "../../../Components/LoaderModal";
 const SignUp = ({ navigation }) => {
   const [checked, setChecked] = useState("first");
   const [isLoader, setIsLoader] = useState(false);
+
+  const RegisterUser = async (values, { setValues }) => {
+    setIsLoader(true);
+    let data = JSON.stringify({
+      name: values.name,
+      email: values.email,
+      password: values.password,
+      user_type: "Owner",
+    });
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: `${BasUrl}user/register`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+    axios
+      .request(config)
+      .then((response) => {
+        setIsLoader(false);
+        navigation.navigate("Login");
+        showToast('success', response.data.message)
+        console.log("responseeeeeeeeee ==>>>>>>>", response.data);
+      })
+      .catch((error) => {
+        setIsLoader(false);
+        console.log("errrorrrrrrrrr ===>>>>>>>>", error);
+      });
+  };
 
   const showToast = (type, msg) => {
     Toast.show({
@@ -25,8 +59,8 @@ const SignUp = ({ navigation }) => {
   };
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
-        <BackButton onPressBack={() => navigation.goBack()} />
-      <ScrollView style={{ flex: 1 }} >
+      <BackButton onPressBack={() => navigation.goBack()} />
+      <ScrollView style={{ flex: 1 }}>
         <View style={{ height: 100 }}></View>
         <Formik
           initialValues={{
@@ -36,9 +70,9 @@ const SignUp = ({ navigation }) => {
             confirmPassword: "",
           }}
           validateOnMount={true}
-          // onSubmit={(values, { setSubmitting, setValues }) =>
-          //   RegistorUser(values, { setSubmitting, setValues })
-          // }
+          onSubmit={(values, { setSubmitting, setValues }) =>
+            RegisterUser(values, { setSubmitting, setValues })
+          }
           validationSchema={SignUpValidationSchema}
         >
           {({
@@ -72,7 +106,6 @@ const SignUp = ({ navigation }) => {
                   onBlur={handleBlur("email")}
                   onChangeText={handleChange("email")}
                   secureText={false}
-
                 />
                 {errors.email && touched.email && (
                   <CustomText text={errors.email} style={styles.errors} />
@@ -84,10 +117,9 @@ const SignUp = ({ navigation }) => {
                   onChangeText={handleChange("password")}
                   secureText={true}
                   icon={true}
-
                 />
                 {errors.password && touched.password && (
-                  <CustomText text={errors.password} style={styles.errors}/>
+                  <CustomText text={errors.password} style={styles.errors} />
                 )}
 
                 <InputField
@@ -97,10 +129,12 @@ const SignUp = ({ navigation }) => {
                   onBlur={handleBlur("confirmPassword")}
                   secureText={true}
                   icon={true}
-
                 />
                 {errors.confirmPassword && touched.confirmPassword && (
-                  <CustomText text={errors.confirmPassword}  style={styles.errors}/>
+                  <CustomText
+                    text={errors.confirmPassword}
+                    style={styles.errors}
+                  />
                 )}
                 <View style={styles.checkView}>
                   <RadioButton
@@ -120,15 +154,17 @@ const SignUp = ({ navigation }) => {
                     />
                   </TouchableOpacity>
                 </View>
-
-                <CustomButton
-                  onPress={() => {
-                    // RegistorUser()
-                    // handleSubmit(values);
-                    navigation.navigate("Login");
-                  }}
-                  buttonText={"Create an account"}
-                />
+                {isLoader ? (
+                  <LoaderModal />
+                ) : (
+                  <CustomButton
+                    onPress={() => {
+                      // RegistorUser()
+                      handleSubmit(values);
+                    }}
+                    buttonText={"Create an account"}
+                  />
+                )}
               </View>
             </View>
           )}

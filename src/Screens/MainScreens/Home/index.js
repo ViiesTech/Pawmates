@@ -17,8 +17,10 @@ import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { COLORS } from "../../../Constants/theme";
-
+import { useDispatch } from "react-redux";
+import { logOut } from "../../../Redux/authSlice";
 const Home = () => {
+  const dispatch = useDispatch();
   const Data = [
     {
       id: 1,
@@ -57,7 +59,7 @@ const Home = () => {
                 />
               </View>
               <View style={styles.iconsContainer}>
-                <TouchableOpacity style={styles.iconsInnerConatiner}>
+                <TouchableOpacity style={styles.iconsInnerConatiner} onPress={()=> dispatch(logOut())}>
                   <Fontisto
                     name={"close-a"}
                     size={20}
