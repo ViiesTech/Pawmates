@@ -18,6 +18,7 @@ import images from "../../../Constants/images";
 import { styles } from "./index.style";
 import CustomButton from "../../../Components/Button";
 import { COLORS } from "../../../Constants/theme";
+import BasUrl from "../../../BasUrl";
 
 const CELL_COUNT = 4;
 const Otp = ({ navigation, route }) => {
@@ -26,7 +27,7 @@ const Otp = ({ navigation, route }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
 
-//   const { id } = route.params;
+  //   const { id } = route.params;
 
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -70,6 +71,44 @@ const Otp = ({ navigation, route }) => {
   }, [count]);
 
   //api
+  const CheckingOtp = () => {
+    setIsLoader(true);
+    let data = JSON.stringify({
+      otp: value,
+      id: id,
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: `${BasUrl}user/verify-otp`,
+      headers: {
+        // Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        setIsLoader(false);
+        console.log(JSON.stringify(response));
+        const res = response.data;
+        if (res.success === true) {
+          navigation.navigate("ResetPassword", {
+            id: id,
+          });
+          showToast("success", res.message);
+        } else {
+          showToast("error", res.message);
+        }
+      })
+      .catch((error) => {
+        setIsLoader(false);
+        console.log(error);
+      });
+  };
 
   const showToast = (type, msg) => {
     Toast.show({
@@ -135,8 +174,7 @@ const Otp = ({ navigation, route }) => {
           <CustomButton
             buttonText={"Verify"}
             onPress={() => {
-                navigation.navigate('ResetPassword')
-            //   CheckingOtp();
+              CheckingOtp();
             }}
           />
 

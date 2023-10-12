@@ -14,7 +14,6 @@ import InputField from "../../../Components/InputFiled";
 import { COLORS } from "../../../Constants/theme";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-// import { UserLogin } from "../../../Redux/authSlice";
 import LoaderModal from "../../../Components/LoaderModal";
 import BasUrl from "../../../BasUrl";
 import { UserLogin } from "../../../Redux/authSlice";
@@ -28,8 +27,8 @@ const LogIn = ({ navigation }) => {
   const handleRadioButtonChange = (value) => {
     setChecked(value);
   };
-  const loading = useSelector((state)=> state.authData.isLoading)
-  console.log(loading)
+  const loading = useSelector((state) => state.authData.isLoading);
+  console.log(loading);
 
   const LogInUser = async (values, { setSubmitting, setValues }) => {
     setIsLoader(true);
