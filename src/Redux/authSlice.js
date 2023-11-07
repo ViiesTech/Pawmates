@@ -12,15 +12,19 @@ const initialState = {
 export const UserLogin = createAsyncThunk("user", async (config) => {
   return axios(config)
   .then((response) => {
-    if(response.data){
-        showToast('error', response.data.message);
+    if(response.data.success === 'true'){
+        showToast('success', response.data.message);
+    }else {
+      showToast('error', response.data.message);
     }
     return response.data;
   })
   .catch(function (error){
-    console.log(error)
+    showToast('error', error.message);
+    return error.message
   })
 });
+
 const showToast = (type,msg) =>{
     Toast.show({
         type: type,
@@ -49,7 +53,8 @@ const authSlice = createSlice({
         state.token = action.payload.token;
     });
     builder.addCase(UserLogin.rejected, (state, action)=>{
-      console.log('action erorrrrrrrrrrrrrr', action.payload )
+      state.isLoading = false
+
     })
   },
 });

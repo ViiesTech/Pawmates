@@ -10,8 +10,8 @@ import { StatusBar } from "react-native";
 const Route = () => {
   const Stack = createStackNavigator();
 
-  const token = useSelector((state)=> state.authData.token)
-  console.log('tokeeeeeeen ==>>>>', token)
+  const token = useSelector((state)=> state.authData?.token)
+  // console.log('tokeeeeeeen ==>>>>', token)
 
   const MyTheme = {
     ...DefaultTheme,
