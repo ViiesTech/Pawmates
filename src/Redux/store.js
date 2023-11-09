@@ -4,6 +4,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {persistReducer} from "redux-persist"
 import thunk from "redux-thunk";
 
+const rootReducer = combineReducers({
+  authData: authReducer,
+});
 
 const persistConfig ={
     key: 'root',
@@ -11,10 +14,6 @@ const persistConfig ={
     whitelist: ['authData'],
     blacklist: [],
 };
-
-const rootReducer = combineReducers({
-  authData: authReducer,
-});
 
 let persistedReducer = persistReducer(persistConfig, rootReducer);
 

@@ -6,12 +6,17 @@ import { useSelector } from "react-redux";
 import AuthStack from "./AuthStack";
 import MainStack from "./MainStack";
 import { StatusBar } from "react-native";
+import { makeLoadingFalse } from "../Redux/authSlice";
+import { useDispatch } from "react-redux";
 
 const Route = () => {
   const Stack = createStackNavigator();
-
   const token = useSelector((state)=> state.authData?.token)
-  // console.log('tokeeeeeeen ==>>>>', token)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(makeLoadingFalse())
+  }, [])
 
   const MyTheme = {
     ...DefaultTheme,

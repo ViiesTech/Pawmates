@@ -31,6 +31,7 @@ const showToast = (type,msg) =>{
         text1: msg,
     })
 }
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -38,9 +39,12 @@ const authSlice = createSlice({
     SignIn: (state, action) => {
       state.user = action.payload;
     },
+    makeLoadingFalse: (state, action) => {
+      state.isLoading = false
+    },
     logOut: (state) => {
       state.token = ""
-       state.user = []
+      state.user = []
     },
   },
   extraReducers: (builder) => {
@@ -59,5 +63,5 @@ const authSlice = createSlice({
   },
 });
 
-export const {SignIn, logOut} = authSlice.actions;
+export const {SignIn, logOut, makeLoadingFalse} = authSlice.actions;
 export default authSlice.reducer;
