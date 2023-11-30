@@ -20,7 +20,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 const SignUp = ({ navigation }) => {
   const [checked, setChecked] = useState(false);
-  const [option, setOption] = useState('owner')
+  const [option, setOption] = useState('pet owner')
   const [isLoader, setIsLoader] = useState(false);
 
   const handleRadioButtonChange = (value) => {
@@ -40,7 +40,7 @@ const SignUp = ({ navigation }) => {
       method: 'post',
       url: `${BasUrl}/user/register`,
       headers: { 
-        'Content-Type': 'application/json', 
+        'Content-Type': 'application/json',
       },
       data : data
     };
@@ -160,7 +160,7 @@ const SignUp = ({ navigation }) => {
                     color={COLORS.primary}
                     uncheckedColor="#949494"
                     status={option === "owner" ? "checked" : "unchecked"}
-                    onPress={() => handleRadioButtonChange("owner")}
+                    onPress={() => handleRadioButtonChange("pet owner'")}
                   />
                   <CustomText
                     text={"Sign up as a Pet Owner "}
@@ -171,7 +171,7 @@ const SignUp = ({ navigation }) => {
                     color={COLORS.primary}
                     uncheckedColor="#949494"
                     status={option === "sitter" ? "checked" : "unchecked"}
-                    onPress={() => handleRadioButtonChange("sitter")}
+                    onPress={() => handleRadioButtonChange("pet sitter")}
                   />
                   <CustomText
                     text={"Sign up as a Pet Sitter"}

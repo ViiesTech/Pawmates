@@ -8,10 +8,15 @@ import MainStack from "./MainStack";
 import { StatusBar } from "react-native";
 import { makeLoadingFalse } from "../Redux/authSlice";
 import { useDispatch } from "react-redux";
+import SitterStack from "./SitterStack";
 
 const Route = () => {
   const Stack = createStackNavigator();
-  const token = useSelector((state)=> state.authData?.token)
+  const token = useSelector((state) => state.authData?.token)
+  const userData = useSelector((state) => state.authData?.user)
+
+  const USER_TYPE = userData?.user_type
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,11 +43,23 @@ const Route = () => {
         initialRouteName="AuthStack"
       >
         {token ? (
+          <>
 
-          <Stack.Screen name="MainStack" component={MainStack} />
-        ):(
+            {
+              USER_TYPE == "sitter" ?
 
-        <Stack.Screen name="AuthStack" component={AuthStack} />
+                <Stack.Screen name="SitterStack" component={SitterStack} />
+
+                :
+
+                <Stack.Screen name="MainStack" component={MainStack} />
+            }
+          </>
+        ) : (
+
+
+
+          <Stack.Screen name="AuthStack" component={AuthStack} />
         )}
 
       </Stack.Navigator>
