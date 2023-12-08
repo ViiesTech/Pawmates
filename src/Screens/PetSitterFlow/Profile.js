@@ -12,23 +12,14 @@ import {
 import React, { useState } from 'react';
 import FastImage from 'react-native-fast-image';
 import images from '../../Constants/images';
-import CustomText from '../../Components/Text';
-import Feather from 'react-native-vector-icons/Feather';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { COLORS } from '../../Constants/theme';
-import { useDispatch } from 'react-redux';
-import { logOut } from '../../Redux/authSlice';
-import * as Animatable from 'react-native-animatable';
 import { widthPercentageToDP } from 'react-native-responsive-screen';
-import InnerButton from '../../Components/innerButton';
+
+
 const Profile = ({navigation}) => {
     return (
         <FastImage source={images.BackGround} style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
-
-
 
             <View style={{ height: 100, width: 100, backgroundColor: "white", borderRadius: 100, marginTop: 20, alignItems: 'center', justifyContent: 'center', alignSelf: 'center' }}>
                 <Ionicons

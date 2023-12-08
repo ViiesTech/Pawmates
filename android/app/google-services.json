@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "124107625156",
+    "project_id": "pawmates-54ade",
+    "storage_bucket": "pawmates-54ade.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124107625156:android:f44fac2c658854c6df2f91",
+        "android_client_info": {
+          "package_name": "com.pawmates"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCR7UTxg04vuXIQvhBiynU68icxa_joles"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

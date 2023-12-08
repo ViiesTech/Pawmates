@@ -42,6 +42,12 @@ const authSlice = createSlice({
     makeLoadingFalse: (state, action) => {
       state.isLoading = false
     },
+    updateSitterStatus: (state, action) => {
+      state.user.petSitter_update_status = action.payload
+    },
+    updatePetAddStatus: (state, action) => {
+      state.user.pet_add_status = action.payload
+    },
     logOut: (state) => {
       state.token = ""
       state.user = []
@@ -63,5 +69,5 @@ const authSlice = createSlice({
   },
 });
 
-export const {SignIn, logOut, makeLoadingFalse} = authSlice.actions;
+export const {SignIn, logOut, makeLoadingFalse, updateSitterStatus, updatePetAddStatus} = authSlice.actions;
 export default authSlice.reducer;

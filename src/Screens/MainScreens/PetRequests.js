@@ -12,21 +12,12 @@ import {
 import React, { useState } from 'react';
 import FastImage from 'react-native-fast-image';
 import images from '../../Constants/images';
-import CustomText from '../../Components/Text';
-import Feather from 'react-native-vector-icons/Feather';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import { COLORS } from '../../Constants/theme';
-import { useDispatch } from 'react-redux';
-import { logOut } from '../../Redux/authSlice';
-import * as Animatable from 'react-native-animatable';
 import { widthPercentageToDP } from 'react-native-responsive-screen';
-import InnerButton from '../../Components/innerButton';
 
-const NotificationScreenn = () => {
-
+const PetRequests = ({navigation}) => {
     const arr = [
         { id: 1, },
         { id: 2, },
@@ -38,18 +29,19 @@ const NotificationScreenn = () => {
 
     return (
         <FastImage source={images.BackGround} style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
-
-
-            <Text style={[styles.HeadingText, { fontWeight: 'bold', fontSize: 25 }]}>Your Requests</Text>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems:'center', marginVertical: 20}}>
+                <Text style={[styles.HeadingText, { fontWeight: 'bold', fontSize: 25 }]}>Your Requests</Text>
+                <Fontisto name="player-settings" size={25} color={'black'} onPress={() => navigation.navigate('Settings')} />
+            </View>
 
             <FlatList
                 data={arr}
+                showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => {
                     return (
                         <View style={{ height: 120, width: widthPercentageToDP('90%'), backgroundColor: "white", borderRadius: 10, marginTop: 10, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, justifyContent: 'space-between' }}>
 
                             <View style={{ flexDirection: 'row' }}>
-
                                 <FontAwesome
                                     name={"photo"}
                                     size={50}
@@ -58,12 +50,10 @@ const NotificationScreenn = () => {
                                 <View style={{ marginLeft: 10 }}>
                                     <Text style={[styles.HeadingText, { fontWeight: 'bold' }]}>Marlene, 21</Text>
                                     <Text style={[styles.HeadingText,]}>55 km, Art. Director</Text>
-
                                 </View>
                             </View>
 
                             <View>
-
                                 <TouchableOpacity style={{ height: 40, width: 100, backgroundColor: 'red', borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
                                     <Text style={{ color: 'white' }}>Accept</Text>
                                 </TouchableOpacity>
@@ -77,13 +67,11 @@ const NotificationScreenn = () => {
                 }}
             />
 
-
-
         </FastImage>
     )
 }
 
-export default NotificationScreenn
+export default PetRequests
 
 
 const styles = StyleSheet.create({

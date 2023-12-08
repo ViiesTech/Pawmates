@@ -16,7 +16,7 @@ import { widthPercentageToDP } from 'react-native-responsive-screen';
 import InnerButton from '../../Components/innerButton';
 
 const YourGender = ({navigation}) => {
-    const [selectedButton, setSelectedButton] = useState(null);
+    const [selectedButton, setSelectedButton] = useState("male");
 
 
     return (
@@ -31,30 +31,24 @@ const YourGender = ({navigation}) => {
                 <InnerButton
                     buttonText={"MALE"}
                     style={{
-                        borderColor: selectedButton === "MALE" ? COLORS.primary : null,
+                        borderColor: selectedButton === "male" ? COLORS.primary : null,
                     }}
-                    onPress={() => {
-                        setSelectedButton("MALE");
-
-                    }}
+                    onPress={() => setSelectedButton("male")}
                 />
                 <InnerButton
-                    buttonText={"WOMEN"}
+                    buttonText={"FEMALE"}
                     style={{
-                        borderColor: selectedButton === "WOMEN" ? COLORS.primary : null,
+                        borderColor: selectedButton === "female" ? COLORS.primary : null,
                     }}
-                    onPress={() => {
-                        setSelectedButton("WOMEN");
-
-                    }}
+                    onPress={() => setSelectedButton("female")}
                 />
           
                 <View style={{ height: 20 }} />
             </View>
 
 
-            <TouchableOpacity onPress={()=> navigation.navigate("AddLocation")} style={{ height: 60, width: widthPercentageToDP('90%'), alignSelf: 'center', backgroundColor:COLORS.secondary_with_opacity, alignItems:'center', justifyContent:'center', borderRadius:200, marginTop:20  }}>
-                        <Text style={{color:COLORS.text_white}}>Continue</Text>
+            <TouchableOpacity onPress={()=> navigation.navigate("ServicesYouGive", {gender: selectedButton})} style={{ height: 60, width: widthPercentageToDP('90%'), alignSelf: 'center', backgroundColor:COLORS.secondary_with_opacity, alignItems:'center', justifyContent:'center', borderRadius:200, marginTop:20  }}>
+                <Text style={{color:COLORS.text_white}}>Continue</Text>
             </TouchableOpacity>
         </FastImage>
     )

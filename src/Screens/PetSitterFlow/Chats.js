@@ -164,18 +164,20 @@ const Chats = ({navigation}) => {
     <View style={styles.container}>
       <View>
         {showSearchInput ? (
-          <View style={styles.inputContainer}>
-            <TextInput
-              placeholder="Search chat"
-              placeholderTextColor={'grey'}
-              style={{color: 'black'}}
-              autoFocus={true}
-              cursorColor="black"
-              value={searchText}
-              onChangeText={handleSearchFilter}
-            />
-            <AntDesign name="search1" size={30} color={COLORS.primary} />
-          </View>
+            <View style={styles.inputContainer}>
+              <AntDesign name="left" size={30} color={COLORS.primary} onPress={() => navigation.goBack()} />
+              <TextInput
+                placeholder="Search chat"
+                placeholderTextColor={'grey'}
+                style={{color: 'black'}}
+                autoFocus={true}
+                cursorColor="black"
+                value={searchText}
+                onChangeText={handleSearchFilter}
+              />
+              <View style={{width: 30}} />
+              <AntDesign name="search1" size={30} color={COLORS.primary} style={{position: 'absolute', right: 12, zIndex: 10, backgroundColor: 'white', padding: 5, borderRadius: 250}} />
+            </View>
         ) : (
           <Header
             showSearchIcon={true}
@@ -247,6 +249,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     marginVertical: 12,
+    overflow: 'hidden'
   },
   warningText: {
     color: 'grey',

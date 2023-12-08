@@ -20,9 +20,7 @@ import { UserLogin } from "../../Redux/authSlice";
 const LogIn = ({ navigation }) => {
   const [isLoader, setIsLoader] = useState(false);
   const dispatch = useDispatch();
-
   const loading = useSelector((state) => state.authData.isLoading);
-  console.log("LOADING =======>>>        ", loading);
 
   const LogInUser = async (values, { setSubmitting, setValues }) => {
     let data = JSON.stringify({

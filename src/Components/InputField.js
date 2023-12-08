@@ -17,6 +17,7 @@ const InputField = ({
   value,
   returnKeyType,
   multiline,
+  numberOfLines,
   textContentType,
   icon,
 }) => {
@@ -30,9 +31,9 @@ const InputField = ({
         onChangeText={onChangeText}
         keyboardType={keyboardType}
         placeholder={placeholder}
+        placeholderTextColor={'rgba(0,0,0,0.7)'}
         secureTextEntry={secureText && passwordHide}
         style={[styles.input, style]}
-        placeholderTextColor={"#949494"}
         defaultValue={defaultValue}
         onFocus={onFocus}
         onBlur={onBlur}
@@ -40,6 +41,7 @@ const InputField = ({
         returnKeyType={returnKeyType}
         underlineColorAndroid="transparent"
         multiline={multiline}
+        numberOfLines={numberOfLines}
         textContentType={textContentType}
         cursorColor={COLORS.black}
       />
@@ -60,7 +62,7 @@ const InputField = ({
 };
 const styles = StyleSheet.create({
   input: {
-    height: 50,
+    // height: 50,
     marginTop: 20,
     paddingHorizontal: 30,
     color: COLORS.black,

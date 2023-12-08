@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Alert
 } from 'react-native';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import FastImage from 'react-native-fast-image';
 import images from '../../Constants/images';
 import CustomText from '../../Components/Text';
@@ -20,6 +20,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { COLORS } from '../../Constants/theme';
 import { useDispatch } from 'react-redux';
 import { logOut } from '../../Redux/authSlice';
+import * as Animatable from 'react-native-animatable';
+import { heightPercentageToDP } from 'react-native-responsive-screen';
+import CustomButton from '../../Components/Button';
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -41,6 +44,16 @@ const Home = ({ navigation }) => {
       image: images.cat4,
     },
   ];
+
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const allTexts = [
+    "First Text",
+    "Second Text",
+    "Third Text",
+    "Fourth Text",
+    "Fifth Text",
+  ]
+  const cardRef = useRef();
 
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
@@ -73,17 +86,14 @@ const Home = ({ navigation }) => {
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
               <TouchableOpacity onPress={()=> navigation.navigate('NotificationScreenn')}>
-
                 <FontAwesome
                   name={'bell'}
                   size={30}
                   color={COLORS.black}
                 />
-
               </TouchableOpacity>
 
               <TouchableOpacity
-
                 onPress={() => navigation.navigate('Chats')}
                 style={{
                   alignSelf: 'flex-start',
@@ -99,6 +109,17 @@ const Home = ({ navigation }) => {
 
             </View>
           </View>
+
+          {/* <Animatable.Text ref={cardRef} animation="fadeInUp"  iterationCount={1} direction="alternate" style={{color: 'black', fontSize: heightPercentageToDP('2%')}}>{allTexts[currentCardIndex]}</Animatable.Text>
+          <CustomButton buttonText={'Next'} onPress={() => {
+                  // Fade out the current card
+                  cardRef.current.fadeOutDown(500).then(() => {
+                  // Increment the index to show the next card
+                  setCurrentCardIndex((prevIndex) => (prevIndex + 1) % allTexts.length);
+                  // Fade in the next card
+                  cardRef.current.fadeInUp(500);
+            });
+          }} /> */}
 
           <FastImage
             source={images.petAvatar}
@@ -160,11 +181,6 @@ const Home = ({ navigation }) => {
                 return (
                   <View style={{ marginHorizontal: 10, marginTop: 15 }}>
                     <TouchableOpacity style={styles.Data_View}>
-                      {/* <CustomText
-                          text={item.title}
-                          style={{ marginHorizontal: 6, fontSize: 13 }}
-                        />
-                        <CustomText text={item.size} /> */}
                       <Image source={item.image} />
                     </TouchableOpacity>
                   </View>

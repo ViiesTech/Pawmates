@@ -9,12 +9,23 @@ import CustomButton from "../../Components/Button";
 import { COLORS } from "../../Constants/theme";
 import DatePicker from "react-native-date-picker";
 import BackButton from "../../Components/BackButton";
+import Toast from "react-native-toast-message";
 
-const Boarding = ({ navigation }) => {
-  const [date, setDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+const Boarding = ({ navigation, route }) => {
+  const {categName, animalName, nickName, gender, age, breed, service} = route.params;
+  
+  const [address, setAddress] = useState('');
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(startDate);
   const [open, setOpen] = useState(false);
   const [endOpen, setEndOpen] = useState(false);
+
+  const showToast = (type,msg) =>{
+    Toast.show({
+        type: type,
+        text1: msg,
+    })
+  }
 
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
@@ -22,15 +33,17 @@ const Boarding = ({ navigation }) => {
       <Headertext />
       <View style={styles.container}>
         <Text style={styles.header}>Boarding near</Text>
+        <InputField placeholder={"Zip Code or address"} value={address} onChangeText={changedText => setAddress(changedText)} />
 
-        <InputField placeholder={"Zip Code or address"} />
+        <Text style={styles.header}>Schedule our services that you want</Text>
         <DatePicker
           modal
           open={open}
-          date={date}
+          date={startDate}
+          minimumDate={new Date()}
           onConfirm={(date) => {
             setOpen(false);
-            setDate(date);
+            setStartDate(date);
           }}
           onCancel={() => {
             setOpen(false);
@@ -40,6 +53,7 @@ const Boarding = ({ navigation }) => {
           modal
           open={endOpen}
           date={endDate}
+          minimumDate={startDate}
           onConfirm={(date) => {
             setEndOpen(false);
             setEndDate(date);
@@ -49,7 +63,7 @@ const Boarding = ({ navigation }) => {
           }}
         />
         <InnerButton
-          buttonText={date.toDateString()}
+          buttonText={startDate.toDateString()}
           onPress={() => setOpen(true)}
           Lefticon={true}
           name="calendar"
@@ -74,7 +88,13 @@ const Boarding = ({ navigation }) => {
         <CustomButton
           buttonText={"Continue"}
           style={{ borderRadius: 25 }}
-          onPress={() => navigation.navigate("PetSize")}
+          onPress={() => {
+            if(address.length > 0){
+              navigation.navigate("PetSize", {categName, animalName, nickName, gender, age, breed, service, address, startDate: startDate.toISOString(), endDate: endDate.toISOString()})
+            }else {
+              showToast('error', 'Please write an address or a zip code!')
+            }
+          }}
         />
       </View>
     </FastImage>

@@ -159,8 +159,8 @@ const SignUp = ({ navigation }) => {
                     value="first"
                     color={COLORS.primary}
                     uncheckedColor="#949494"
-                    status={option === "owner" ? "checked" : "unchecked"}
-                    onPress={() => handleRadioButtonChange("pet owner'")}
+                    status={option === "pet owner" ? "checked" : "unchecked"}
+                    onPress={() => handleRadioButtonChange("pet owner")}
                   />
                   <CustomText
                     text={"Sign up as a Pet Owner "}
@@ -170,7 +170,7 @@ const SignUp = ({ navigation }) => {
                     value="second"
                     color={COLORS.primary}
                     uncheckedColor="#949494"
-                    status={option === "sitter" ? "checked" : "unchecked"}
+                    status={option === "pet sitter" ? "checked" : "unchecked"}
                     onPress={() => handleRadioButtonChange("pet sitter")}
                   />
                   <CustomText
