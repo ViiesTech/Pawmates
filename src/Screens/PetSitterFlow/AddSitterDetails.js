@@ -102,10 +102,10 @@ const AddSitterDetails = ({navigation, route}) => {
             <BackButton onPressBack={() => navigation.goBack()} style={{position: 'absolute', top: 10, left: 6, zIndex: 20}} />
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
 
-            <Text style={styles.HeadingText}>Location</Text>
-            <InputField placeholder={'Write your address'} value={location} onChangeText={changedText => setLocation(changedText)} style={{marginTop: 8, marginBottom: hp('4%')}} />
+            <Text style={[styles.HeadingText, {marginBottom: -5}]}>Location</Text>
+            <InputField placeholder={'Write your address'} value={location} onChangeText={changedText => setLocation(changedText)}  />
 
-            <Text style={styles.HeadingText}>What kind of pets you can take care of?</Text>
+            <Text style={[styles.HeadingText, {marginTop: 20}]}>What kind of pets you can take care of?</Text>
             <View style={{flexDirection: 'row', justifyContent:'flex-start', flexWrap: 'wrap', alignItems:'center'}}>
                 {
                     animals.map((eachAnimal, index) => {

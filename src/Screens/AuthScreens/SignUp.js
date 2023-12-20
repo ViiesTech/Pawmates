@@ -65,7 +65,6 @@ const SignUp = ({ navigation }) => {
       setIsLoader(false)
       showToast('error', 'Please accept the terms and conditions 😊')
     }
-
   };
 
   const showToast = (type, msg) => {

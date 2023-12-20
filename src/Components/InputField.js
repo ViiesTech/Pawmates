@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { StyleSheet, TextInput, View,TouchableOpacity } from "react-native";
-import { COLORS } from "../Constants/theme";
-import Feather from "react-native-vector-icons/Feather";
+import React, {useState} from 'react';
+import {StyleSheet, TextInput, View, TouchableOpacity} from 'react-native';
+import {COLORS} from '../Constants/theme';
+import Feather from 'react-native-vector-icons/Feather';
+import {widthPercentageToDP} from 'react-native-responsive-screen';
 
 const InputField = ({
   style,
   placeholder,
   onChangeText,
-  secureText=false,
+  secureText = false,
   keyboardType,
   defaultValue,
   onFocus,
@@ -24,7 +25,17 @@ const InputField = ({
   const [passwordHide, setpasswordHide] = useState(secureText);
 
   return (
-    <View>
+    <View
+      style={{
+        flexDirection: 'row',
+        alignSelf: 'center',
+        alignItems: 'center',
+        width: widthPercentageToDP('90%'),
+        borderRadius: 10,
+        borderWidth: 0.5,
+        borderColor: COLORS.black,
+        marginTop: 20
+      }}>
       <TextInput
         ref={ref}
         value={value}
@@ -48,12 +59,11 @@ const InputField = ({
       {icon && (
         <TouchableOpacity
           style={styles.Righticon}
-          onPress={() => setpasswordHide(!passwordHide)}
-        >
+          onPress={() => setpasswordHide(!passwordHide)}>
           {passwordHide ? (
-            <Feather name="eye" size={22} color={"gray"} />
+            <Feather name="eye" size={22} color={'gray'} />
           ) : (
-            <Feather name="eye-off" size={22} color={"gray"} />
+            <Feather name="eye-off" size={22} color={'gray'} />
           )}
         </TouchableOpacity>
       )}
@@ -62,21 +72,13 @@ const InputField = ({
 };
 const styles = StyleSheet.create({
   input: {
-    // height: 50,
-    marginTop: 20,
-    paddingHorizontal: 30,
+    width: '88%',
+    padding: 20,
     color: COLORS.black,
-    // backgroundColor: "#73737E",
-    borderRadius: 10,
-    borderWidth: 0.5,
-    borderColor: COLORS.black,
     opacity: 0.8,
   },
   Righticon: {
-    position: "absolute",
-    alignSelf: "flex-end",
-    padding: 15,
-    marginTop: 20,
+    // padding: 15,
   },
 });
 

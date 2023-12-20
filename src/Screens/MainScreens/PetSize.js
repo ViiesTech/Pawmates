@@ -1,16 +1,20 @@
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import React, { useState } from "react";
 import FastImage from "react-native-fast-image";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+
 import images from "../../Constants/images";
 import Headertext from "../../Components/HeaderText";
 import CustomText from "../../Components/Text";
 import CustomButton from "../../Components/Button";
 import { COLORS } from "../../Constants/theme";
 import BackButton from "../../Components/BackButton";
+import InputField from "../../Components/InputField";
 
 const PetSize = ({navigation, route}) => {
   const {categName, animalName, nickName, gender, age, breed, service, address, startDate, endDate} = route.params;
-  const [petSize, setPetSize] = useState('small')
+  const [petSize, setPetSize] = useState('small');
+  const [about, setAbout] = useState('');
   const Data = [
     {
       id: 1,
@@ -41,6 +45,8 @@ const PetSize = ({navigation, route}) => {
   
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+
       <BackButton onPressBack={() => navigation.goBack()} />
       <Headertext />
       <View style={styles.container}>
@@ -66,18 +72,34 @@ const PetSize = ({navigation, route}) => {
             );
           }}
         />
-
-        <View style={{ height: 30 }} />
       </View>
-      <View style={{ height: "26%" }} />
+      <View style={styles.container}>
+        <Text style={styles.header}>Tell us about your pet</Text>
+        <InputField
+          placeholder={'Tell us more about pet...'}
+          multiline={true}
+          numberOfLines={8}
+          value={about}
+          onChangeText={changedText => setAbout(changedText)}
+          style={{
+            marginTop: 8,
+            marginBottom: hp('4%'),
+            textAlignVertical: 'top',
+            paddingVertical: 15,
+            paddingHorizontal: 20,
+            marginTop: 20
+          }}
+        />
+      </View>
 
       <View style={{ alignItems: "flex-end" }}>
         <CustomButton
           buttonText={"Continue"}
           style={{ borderRadius: 25 }}
-          onPress={() => navigation.navigate("AddImages", {categName, animalName, nickName, gender, age, breed, service, address, startDate, endDate, petSize})}
+          onPress={() => navigation.navigate("AddImages", {categName, animalName, nickName, gender, age, breed, service, address, startDate, endDate, petSize, about})}
         />
       </View>
+      </ScrollView>
     </FastImage>
   );
 };

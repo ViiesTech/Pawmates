@@ -15,7 +15,7 @@ export const UserLogin = createAsyncThunk("user", async (config) => {
     if(response.data.success === 'true'){
         showToast('success', response.data.message);
     }else {
-      showToast('error', response.data.message);
+        showToast('error', response.data.message);
     }
     return response.data;
   })

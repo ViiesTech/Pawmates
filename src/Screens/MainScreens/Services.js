@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import images from '../../Constants/images';
@@ -39,6 +39,8 @@ const Service = ({navigation, route}) => {
 
   return (
     <FastImage source={images.BackGround} style={{flex: 1}}>
+      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+
       <BackButton onPressBack={() => navigation.goBack()} />
       <Headertext />
       <View style={styles.container}>
@@ -101,6 +103,8 @@ const Service = ({navigation, route}) => {
 
         <View style={{height: 30}} />
       </View>
+
+      </ScrollView>
     </FastImage>
   );
 };

@@ -39,6 +39,7 @@ const AddImages = ({navigation, route}) => {
     startDate,
     endDate,
     petSize,
+    about
   } = route.params;
   const [pickedImages, setPickedImages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -102,6 +103,7 @@ const AddImages = ({navigation, route}) => {
     data.append('pet_pick_up', endDate);
     data.append('pet_size', petSize);
     data.append('pet_purpose_type', service);
+    data.append('pet_descp', about);
 
     let config = {
       method: 'post',
@@ -119,7 +121,7 @@ const AddImages = ({navigation, route}) => {
       .then(response => {
         setLoading(false)
         if(response.data.success){
-            navigation.navigate('PetRequests')
+            navigation.navigate('Home')
             showToast('success', "Pet added successfully 😃")
             dispatch(updatePetAddStatus(1))
         }else {

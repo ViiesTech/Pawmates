@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import images from '../../Constants/images';
@@ -6,11 +6,13 @@ import Headertext from '../../Components/HeaderText';
 import InnerButton from '../../Components/innerButton';
 import {COLORS} from '../../Constants/theme';
 import BackButton from '../../Components/BackButton';
+import { useSelector } from 'react-redux';
 
 // We move from the screens ForWhen.js -> Services.js -> WhichAnimal.js -> Boarding.js -> PetSize.js -> AddImages.js and 
 // keep filling the form for adding a pet
 
-const ForWhen = ({navigation}) => {
+const ForWhen = ({navigation, route}) => {
+  const {user} = useSelector(state => state.authData);
   const [selectedButton, setSelectedButton] = useState(null);
 
   const handleButtonClick = buttonText => {
@@ -19,8 +21,13 @@ const ForWhen = ({navigation}) => {
 
   return (
     <FastImage source={images.BackGround} style={{flex: 1}}>
-      {/* <BackButton onPressBack={() => navigation.goBack()} /> */}
+      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+
+      {user.pet_add_status ? (
+        <BackButton onPressBack={() => navigation.goBack()} />
+      ): null}
       <Headertext />
+
       <View style={styles.container}>
         <Text style={styles.header}>
           I'm looking for service {'\n'} for my:
@@ -80,6 +87,8 @@ const ForWhen = ({navigation}) => {
         />
         <View style={{height: 20}} />
       </View>
+
+      </ScrollView>
     </FastImage>
   );
 };

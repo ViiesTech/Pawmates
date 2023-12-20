@@ -107,7 +107,7 @@ const AddPhotos = ({navigation, route}) => {
         .then(response => {
           setLoading(false)
           if(response.data.success){
-              navigation.navigate('Profile')
+              navigation.navigate('Home')
               showToast('success', "Your data has been registered 😃")
               dispatch(updateSitterStatus(1))
           }else {

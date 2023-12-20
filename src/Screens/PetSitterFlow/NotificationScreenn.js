@@ -26,7 +26,6 @@ import { widthPercentageToDP } from 'react-native-responsive-screen';
 import InnerButton from '../../Components/innerButton';
 
 const NotificationScreenn = ({navigation}) => {
-
     const arr = [
         { id: 1, },
         { id: 2, },
@@ -34,22 +33,25 @@ const NotificationScreenn = ({navigation}) => {
         { id: 4, },
         { id: 5, },
         { id: 6, }
-    ]
+    ];
+    
+    const fetchAllRequests = () => {
+        console.log("lkjasd")
+    }
 
     return (
         <FastImage source={images.BackGround} style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
 
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems:'center', marginVertical: 20}}>
-            <Fontisto name="angle-left" size={22} color={'black'} onPress={() => navigation.goBack()} />
-            <Text style={[styles.HeadingText, { fontWeight: 'bold', fontSize: 25 }]}>Your Requests</Text>
-        </View>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems:'center', marginVertical: 20}}>
+                <Fontisto name="angle-left" size={22} color={'black'} onPress={() => navigation.goBack()} />
+                <Text style={[styles.HeadingText, { fontWeight: 'bold', fontSize: 25 }]}>Your Requests</Text>
+            </View>
 
             <FlatList
                 data={arr}
                 renderItem={({ item }) => {
                     return (
                         <View style={{ height: 120, width: widthPercentageToDP('90%'), backgroundColor: "white", borderRadius: 10, marginTop: 10, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, justifyContent: 'space-between' }}>
-
                             <View style={{ flexDirection: 'row' }}>
                                 <FontAwesome
                                     name={"photo"}
@@ -59,7 +61,6 @@ const NotificationScreenn = ({navigation}) => {
                                 <View style={{ marginLeft: 10 }}>
                                     <Text style={[styles.HeadingText, { fontWeight: 'bold' }]}>Marlene, 21</Text>
                                     <Text style={[styles.HeadingText,]}>55 km, Art. Director</Text>
-
                                 </View>
                             </View>
 
@@ -67,7 +68,6 @@ const NotificationScreenn = ({navigation}) => {
                                 <TouchableOpacity style={{ height: 40, width: 100, backgroundColor: 'red', borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
                                     <Text style={{ color: 'white' }}>Accept</Text>
                                 </TouchableOpacity>
-
                                 <TouchableOpacity style={{ height: 40, width: 100, borderRadius: 10, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'red', marginTop: 5 }}>
                                     <Text style={{ color: 'black' }}>Chat Now</Text>
                                 </TouchableOpacity>
@@ -76,8 +76,6 @@ const NotificationScreenn = ({navigation}) => {
                     )
                 }}
             />
-
-
 
         </FastImage>
     )

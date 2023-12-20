@@ -40,7 +40,6 @@ const AddSitterDetails2 = ({navigation, route}) => {
           keyboardType={'number-pad'}
           value={age}
           onChangeText={changedText => setAge(changedText)}
-          style={{marginTop: 8, marginBottom: hp('4%')}}
         />
 
         <Text style={styles.HeadingText}>About</Text>
@@ -52,7 +51,6 @@ const AddSitterDetails2 = ({navigation, route}) => {
           onChangeText={changedText => setAbout(changedText)}
           style={{
             marginTop: 8,
-            marginBottom: hp('4%'),
             textAlignVertical: 'top',
             paddingVertical: 15,
             paddingHorizontal: 20,
@@ -83,7 +81,7 @@ const styles = StyleSheet.create({
     fontSize: hp('2.2%'),
     fontWeight: 'bold',
     marginLeft: 5,
-    marginBottom: 8,
+    marginTop: 8,
   },
   container: {
     backgroundColor: COLORS.text_white,

@@ -33,10 +33,10 @@ const InnerButton = ({
               color={color}
               size={size}
               style={{
-                alignSelf: "flex-end",
-                padding: 15,
-                height:50,
-                marginTop:30
+                // alignSelf: "flex-end",
+                // padding: 15,
+                // height:50,
+                // marginTop:30
               }}
             />
           )}
@@ -49,7 +49,7 @@ export default InnerButton;
 
 const styles = StyleSheet.create({
   container: {
-    height: 50,
+    height: 60,
     alignItems: "center",
     width: "98%",
     borderRadius: 10,

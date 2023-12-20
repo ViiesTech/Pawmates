@@ -68,7 +68,6 @@ const ChatScreen = ({navigation, route}) => {
     };
   }, []);
 
-  console.log("-0-0-0-0-0-0-0-0-0-0-0-0-------->>       ", isKeyboardVisible)
   
   const renderMessages = ({item, index}) => {
     if (item.messageTime >= deletedFor[data.id]) {
