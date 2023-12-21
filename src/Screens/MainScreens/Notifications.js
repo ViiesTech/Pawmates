@@ -98,7 +98,6 @@ const Notifications = ({navigation}) => {
           .then((response) => {
             if(response.data.success){
                 fetchAllRequests()
-                showToast('success', 'You have successfully accepted the request of this pet sitter')
             }else {
                 showToast('error', response.data.message)
             }
