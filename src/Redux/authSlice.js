@@ -12,14 +12,12 @@ const initialState = {
 export const UserLogin = createAsyncThunk("user", async (config) => {
   return axios(config)
   .then((response) => {
-    if(response.data.success === 'true'){
-        showToast('success', response.data.message);
-    }else {
-        showToast('error', response.data.message);
+    if(!response.data.success){
+      showToast('error', response.data.message);
     }
     return response.data;
   })
-  .catch(function (error){
+  .catch((error) => {
     showToast('error', error.message);
     return error.message
   })
@@ -59,8 +57,8 @@ const authSlice = createSlice({
     });
     builder.addCase(UserLogin.fulfilled, (state, action) =>{
         state.isLoading = false;
-        state.user = action.payload;
-        state.token = action.payload.token;
+        state.user = action.payload.data;
+        state.token = action.payload.data?.token;
     });
     builder.addCase(UserLogin.rejected, (state, action)=>{
       state.isLoading = false

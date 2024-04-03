@@ -40,7 +40,8 @@ const AddSitterDetails2 = ({navigation, route}) => {
           keyboardType={'number-pad'}
           value={age}
           onChangeText={changedText => setAge(changedText)}
-        />
+          containerStyle={{width: wp('85%')}}
+          />
 
         <Text style={styles.HeadingText}>About</Text>
         <InputField
@@ -49,6 +50,7 @@ const AddSitterDetails2 = ({navigation, route}) => {
           numberOfLines={8}
           value={about}
           onChangeText={changedText => setAbout(changedText)}
+          containerStyle={{width: wp('85%')}}
           style={{
             marginTop: 8,
             textAlignVertical: 'top',

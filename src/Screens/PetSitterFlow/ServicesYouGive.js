@@ -5,6 +5,7 @@ import {
     Image,
     TouchableOpacity,
     StyleSheet,
+    ScrollView,
   } from 'react-native';
   import React, {useState} from 'react';
   import FastImage from 'react-native-fast-image';
@@ -72,6 +73,7 @@ import Toast from 'react-native-toast-message';
   
     return (
       <FastImage source={images.BackGround} style={{flex: 1}}>
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
         <BackButton onPressBack={() => navigation.goBack()} />
         <Headertext />
         <View style={styles.container}>
@@ -102,21 +104,20 @@ import Toast from 'react-native-toast-message';
   
           <View style={{height: 30}} />
         </View>
-        <View style={{height: '12%'}} />
   
-        <View style={{alignItems: 'flex-end'}}>
-          <CustomButton
-            buttonText={'Continue'}
-            style={{borderRadius: 25}}
-            onPress={() => {
-                if(services.length > 0){
-                    navigation.navigate('AddSitterDetails', {gender, services})
-                }else {
-                    showToast('error', "You must select a single option!")
-                }
-            }}
-          />
-        </View>
+        <CustomButton
+          buttonText={'Continue'}
+          style={{borderRadius: 25}}
+          onPress={() => {
+              if(services.length > 0){
+                  navigation.navigate('AddSitterDetails', {gender, services})
+              }else {
+                  showToast('error', "You must select a single option!")
+              }
+          }}
+        />
+
+        </ScrollView>
       </FastImage>
     );
   };

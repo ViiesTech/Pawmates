@@ -38,13 +38,14 @@ const AddPhotos = ({navigation, route}) => {
 
   const pickImage = () => {
     ImagePicker.openPicker({
+      multiple: true,
       width: 300,
       height: 400,
       mediaType: 'photo',
       cropping: true,
     })
       .then(image => {
-        setPickedImages([...pickedImages, image]);
+        setPickedImages([...pickedImages, ...image]);
       })
       .catch(err => {
         console.log('Some error message occurred with picking images');
@@ -89,6 +90,16 @@ const AddPhotos = ({navigation, route}) => {
         type: pickedImages[2].mime,
         uri: pickedImages[2].path
     }) : null
+    pickedImages.length > 3 ? data.append('images', {
+        name: 'image',
+        type: pickedImages[3].mime,
+        uri: pickedImages[3].path
+    }) : null
+    pickedImages.length > 4 ? data.append('images', {
+        name: 'image',
+        type: pickedImages[4].mime,
+        uri: pickedImages[4].path
+    }) : null
 
     let config = {
       method: 'post',
@@ -101,7 +112,7 @@ const AddPhotos = ({navigation, route}) => {
     };
 
     setLoading(true)
-    if(pickedImages.length > 0){
+    if(pickedImages.length > 4){
       axios
         .request(config)
         .then(response => {
@@ -120,7 +131,7 @@ const AddPhotos = ({navigation, route}) => {
         });
     }else {
       setLoading(false)
-      showToast('error', 'Please select atleast one picture 🙂')
+      showToast('error', 'Please select atleast five picture 🙂')
     }
   };
 
@@ -140,26 +151,28 @@ const AddPhotos = ({navigation, route}) => {
         Your images
       </Text>
       <Text style={{color: COLORS.black, width: wp('70%')}}>
-        Please share some of your pictures
+        You can pick upto five images.
       </Text>
 
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row', flexWrap: 'wrap', width: wp('92%'), alignSelf:'center'}}>
         {pickedImages.map((eachImg, index) => {
-          return (
-            <View key={index} style={styles.imageStyling}>
-              <Image
-                source={{uri: eachImg.path}}
-                style={{width: '100%', height: '100%', borderRadius: 10}}
-              />
-              <TouchableOpacity
-                style={styles.crossIcon}
-                onPress={() => onRemovePress(eachImg.path)}>
-                <Text style={{color: 'white', fontWeight: 'bold', fontSize: 18}}>x</Text>
-              </TouchableOpacity>
-            </View>
-          );
+          if(index < 5){
+            return (
+              <View key={index} style={styles.imageStyling}>
+                <Image
+                  source={{uri: eachImg.path}}
+                  style={{width: '100%', height: '100%', borderRadius: 10}}
+                />
+                <TouchableOpacity
+                  style={styles.crossIcon}
+                  onPress={() => onRemovePress(eachImg.path)}>
+                  <Text style={{color: 'white', fontWeight: 'bold', fontSize: 18}}>x</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          }
         })}
-        {pickedImages.length < 3 ? (
+        {pickedImages.length < 5 ? (
           <TouchableOpacity
             onPress={() => pickImage()}
             style={styles.placeholderCont}>
@@ -172,6 +185,7 @@ const AddPhotos = ({navigation, route}) => {
           </TouchableOpacity>
         ) : null}
       </View>
+
 
       <TouchableOpacity
         onPress={sendAddPetRequest}
@@ -251,7 +265,7 @@ const styles = StyleSheet.create({
   },
   imageStyling: {
     height: hp('20%'),
-    width: wp('28%'),
+    width: '31%',
     backgroundColor: 'white',
     borderRadius: 10,
     marginTop: 20,
@@ -259,11 +273,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'lightgrey',
-    marginRight: 10,
+    marginRight: '2%'
   },
   placeholderCont: {
     height: hp('20%'),
-    width: wp('28%'),
+    width: '31%',
     backgroundColor: 'white',
     borderRadius: 10,
     marginTop: 20,

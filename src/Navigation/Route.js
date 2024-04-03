@@ -14,9 +14,7 @@ const Route = () => {
   const Stack = createStackNavigator();
   const {token, user} = useSelector(state => state.authData);
 
-  console.log("@#@#@#@#@#@#@#*****&&&&&&++++===>>    ", user)
-
-  const USER_TYPE = user.user_type;
+  const USER_TYPE = user?.user_type;
   const dispatch = useDispatch();
 
   useEffect(() => {

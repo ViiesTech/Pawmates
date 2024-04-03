@@ -7,6 +7,7 @@ import {
   TextInput,
   FlatList,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {COLORS} from '../../Constants/theme';
@@ -18,16 +19,17 @@ import ChatCard from '../../Components/ChatCard';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Header from '../../Components/Header';
 import {useSelector} from 'react-redux';
-import firestore from '@react-native-firebase/firestore';
+// import firestore from '@react-native-firebase/firestore';
 import axios from 'axios';
 import Button from '../../Components/Button';
 import Bottleneck from 'bottleneck';
 
 const Chats = ({navigation}) => {
+  const [selectedOption, setSelectedOption] = useState('upcoming')
   const [showSearchInput, setShowSearchInput] = useState(false);
   const {user, token} = useSelector(state => state.authData);
   const [chats, setChats] = useState([]);
-  const [chatLoading, setChatLoading] = useState(true);
+  const [chatLoading, setChatLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [filteredChats, setFilteredChats] = useState('');
 
@@ -63,63 +65,63 @@ const Chats = ({navigation}) => {
   });
 
   const getAllChats = () => {
-    firestore()
-      .collection('chats')
-      .where('ids', 'array-contains', `${user.id}`)
-      .orderBy('lastMessageTime', 'desc')
-      .onSnapshot(snapshot => {
-        const chatsData = [];
-        snapshot?.forEach(eachChat => {
-          const chatId = eachChat.data().ids.filter(id => {
-            return id !== `${user.id}`;
-          });
+    // firestore()
+    //   .collection('chats')
+    //   .where('ids', 'array-contains', `${user.id}`)
+    //   .orderBy('lastMessageTime', 'desc')
+    //   .onSnapshot(snapshot => {
+    //     const chatsData = [];
+    //     snapshot?.forEach(eachChat => {
+    //       const chatId = eachChat.data().ids.filter(id => {
+    //         return id !== `${user.id}`;
+    //       });
 
-          chatsData.push({
-            ...eachChat.data(),
-            chatId,
-          });
-        });
+    //       chatsData.push({
+    //         ...eachChat.data(),
+    //         chatId,
+    //       });
+    //     });
 
-        Promise.all(
-          chatsData.map(chat => {
-            return limiter.schedule(async () => {
-              try {
-                let config = {
-                  method: 'get',
-                  url: `https://customdemo.website/apps/spill-app/public/api/user/${chat.chatId}`,
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                };
-                const response = await axios.request(config);
-                if (response.data.success) {
-                  return {
-                    ...response.data.data,
-                    lastMessage: chat.lastMessage.text,
-                    lastMessageTime: chat.lastMessageTime,
-                  };
-                } else {
-                  console.log('there is a error ');
-                  return null;
-                }
-              } catch (error) {
-                console.error(error);
-                return null;
-              }
-            });
-          }),
-        )
-          .then(userData => {
-            // Filter out null values from the array
-            const validUserData = userData.filter(user => user !== null);
-            setChats(validUserData);
-            setChatLoading(false);
-          })
-          .catch(error => {
-            console.error(error);
-            setChatLoading(false);
-          });
-      })
+    //     Promise.all(
+    //       chatsData.map(chat => {
+    //         return limiter.schedule(async () => {
+    //           try {
+    //             let config = {
+    //               method: 'get',
+    //               url: `https://customdemo.website/apps/spill-app/public/api/user/${chat.chatId}`,
+    //               headers: {
+    //                 Authorization: `Bearer ${token}`,
+    //               },
+    //             };
+    //             const response = await axios.request(config);
+    //             if (response.data.success) {
+    //               return {
+    //                 ...response.data.data,
+    //                 lastMessage: chat.lastMessage.text,
+    //                 lastMessageTime: chat.lastMessageTime,
+    //               };
+    //             } else {
+    //               console.log('there is a error ');
+    //               return null;
+    //             }
+    //           } catch (error) {
+    //             console.error(error);
+    //             return null;
+    //           }
+    //         });
+    //       }),
+    //     )
+    //       .then(userData => {
+    //         // Filter out null values from the array
+    //         const validUserData = userData.filter(user => user !== null);
+    //         setChats(validUserData);
+    //         setChatLoading(false);
+    //       })
+    //       .catch(error => {
+    //         console.error(error);
+    //         setChatLoading(false);
+    //       });
+    //   })
   };
 
 
@@ -185,6 +187,15 @@ const Chats = ({navigation}) => {
             onBackPress={() => navigation.goBack()}
           />
         )}
+      </View>
+
+      <View style={{width: wp('95%'), height: hp('6%'), alignSelf: 'center', borderRadius: 25, backgroundColor: 'lightgrey', flexDirection: 'row', alignItems: 'row', overflow: 'hidden', marginVertical: 15}}>
+        <TouchableOpacity onPress={() => setSelectedOption('upcoming')} style={[styles.option, selectedOption === 'upcoming' ? {backgroundColor: COLORS.primary_with_opacity} : null]}>
+          <Text style={[{fontSize: hp('2.2%'), color: 'rgba(0,0,0,0.6)', fontWeight: 'bold'}, selectedOption === 'upcoming' ? {color: 'white'} : null]}>UPCOMING</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setSelectedOption('booked')} style={[styles.option, selectedOption === 'booked' ? {backgroundColor: COLORS.primary_with_opacity} : null]}>
+          <Text style={[{fontSize: hp('2.2%'), color: 'rgba(0,0,0,0.6)', fontWeight: 'bold'}, selectedOption === 'booked' ? {color: 'white'} : null]}>BOOKED</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.allChatsContainer}>
@@ -262,4 +273,5 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginTop: -20
   },
+  option: {width: '50%', height: '100%', justifyContent: 'center', alignItems: 'center'}
 });

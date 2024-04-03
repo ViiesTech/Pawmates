@@ -21,12 +21,13 @@ const InputField = ({
   numberOfLines,
   textContentType,
   icon,
+  containerStyle
 }) => {
   const [passwordHide, setpasswordHide] = useState(secureText);
 
   return (
     <View
-      style={{
+      style={[{
         flexDirection: 'row',
         alignSelf: 'center',
         alignItems: 'center',
@@ -35,7 +36,7 @@ const InputField = ({
         borderWidth: 0.5,
         borderColor: COLORS.black,
         marginTop: 20
-      }}>
+      }, containerStyle]}>
       <TextInput
         ref={ref}
         value={value}

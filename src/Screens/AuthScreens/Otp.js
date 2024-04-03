@@ -94,7 +94,7 @@ const Otp = ({ navigation, route }) => {
         setIsLoader(false);
         console.log(JSON.stringify(response));
         const res = response.data;
-        if (res.success === 'true') {
+        if (res.success) {
           navigation.navigate("ResetPassword", {id});
           showToast("success", res.message);
         } else {

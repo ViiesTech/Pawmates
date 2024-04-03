@@ -1,38 +1,65 @@
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
-import React, { useState } from "react";
-import FastImage from "react-native-fast-image";
-import { RadioButton } from "react-native-paper";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
+import React, {useState} from 'react';
+import FastImage from 'react-native-fast-image';
+import {RadioButton} from 'react-native-paper';
 
-import Toast from "react-native-toast-message";
-import { logInValidationSchema } from "../../Utills/Validations";
-import CustomText from "../../Components/Text";
-import CustomButton from "../../Components/Button";
-import images from "../../Constants/images";
-import { Formik } from "formik";
-import InputField from "../../Components/InputField";
-import { COLORS } from "../../Constants/theme";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import LoaderModal from "../../Components/LoaderModal";
-import BasUrl from "../../BasUrl";
-import { UserLogin } from "../../Redux/authSlice";
+import Toast from 'react-native-toast-message';
+import {logInValidationSchema} from '../../Utills/Validations';
+import CustomText from '../../Components/Text';
+import CustomButton from '../../Components/Button';
+import images from '../../Constants/images';
+import {Formik} from 'formik';
+import InputField from '../../Components/InputField';
+import {COLORS} from '../../Constants/theme';
+import axios from 'axios';
+import {useDispatch, useSelector} from 'react-redux';
+import LoaderModal from '../../Components/LoaderModal';
+import BasUrl from '../../BasUrl';
+import {UserLogin} from '../../Redux/authSlice';
 
-const LogIn = ({ navigation }) => {
+const LogIn = ({navigation}) => {
   const [isLoader, setIsLoader] = useState(false);
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.authData.isLoading);
+  const loading = useSelector(state => state.authData.isLoading);
 
-  const LogInUser = async (values, { setSubmitting, setValues }) => {
+  const LogInUser = async (values, {setSubmitting, setValues}) => {
+    // const myHeaders = new Headers();
+    // myHeaders.append("Content-Type", "application/json");
+    
+    // const raw = JSON.stringify({
+    //   "email": "sitter10@gmail.com",
+    //   "password": "12345678"
+    // });
+    
+    // const requestOptions = {
+    //   method: "POST",
+    //   headers: myHeaders,
+    //   body: raw,
+    //   redirect: "follow"
+    // };
+    
+    // fetch("http://54.172.115.72:3000/user/login", requestOptions)
+    //   .then((response) => response.text())
+    //   .then((result) => {showToast("success", "succse"), console.log("ress",result)})
+    //   .catch((error) => {  showToast("error", "error"),console.error(error)});
+    // return;
+
     let data = JSON.stringify({
       email: values.email,
       password: values.password,
     });
 
     let config = {
-      method: "post",
+      method: 'post',
       url: `${BasUrl}/user/login`,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       data: data,
     };
@@ -46,17 +73,16 @@ const LogIn = ({ navigation }) => {
   };
 
   return (
-    <FastImage source={images.BackGround} style={{ flex: 1 }}>
-      <View style={{ height: 100 }}></View>
-      <ScrollView style={{ flex: 1 }}>
+    <FastImage source={images.BackGround} style={{flex: 1}}>
+      <View style={{height: 100}}></View>
+      <ScrollView style={{flex: 1}}>
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{email: '', password: ''}}
           validateOnMount={true}
-          onSubmit={(values, { setSubmitting, setValues }) =>
-            LogInUser(values, { setSubmitting, setValues })
+          onSubmit={(values, {setSubmitting, setValues}) =>
+            LogInUser(values, {setSubmitting, setValues})
           }
-          validationSchema={logInValidationSchema}
-        >
+          validationSchema={logInValidationSchema}>
           {({
             handleSubmit,
             handleChange,
@@ -69,25 +95,25 @@ const LogIn = ({ navigation }) => {
             <View style={styles.main_container}>
               <View style={styles.container}>
                 <CustomText
-                  text={"Sign In with email or username"}
+                  text={'Sign In with email or username'}
                   style={styles.screen_title}
                 />
                 <InputField
-                  placeholder={"username or email"}
+                  placeholder={'username or email'}
                   value={values.email}
-                  onChangeText={handleChange("email")}
-                  onBlur={handleBlur("email")}
-                  keyboardType={"email-address"}
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  keyboardType={'email-address'}
                   secureText={false}
                 />
                 {errors.email && touched.email && (
                   <Text style={styles.errors}>{errors.email}</Text>
                 )}
                 <InputField
-                  placeholder={"password"}
+                  placeholder={'password'}
                   value={values.password}
-                  onChangeText={handleChange("password")}
-                  onBlur={handleBlur("password")}
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
                   secureText={true}
                   icon={true}
                 />
@@ -96,20 +122,19 @@ const LogIn = ({ navigation }) => {
                 )}
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("ForgetPassword");
+                    navigation.navigate('ForgetPassword');
                   }}
-                  style={{ alignSelf: "flex-end", marginTop: 10 }}
-                >
+                  style={{alignSelf: 'flex-end', marginTop: 10}}>
                   <CustomText
-                    text={"forgot password?"}
-                    style={{ fontSize: 14 }}
+                    text={'forgot password?'}
+                    style={{fontSize: 14}}
                   />
                 </TouchableOpacity>
                 {loading ? (
                   <LoaderModal />
                 ) : (
                   <CustomButton
-                    buttonText={"Sign In"}
+                    buttonText={'Sign In'}
                     onPress={() => {
                       handleSubmit(values);
                     }}
@@ -118,19 +143,16 @@ const LogIn = ({ navigation }) => {
 
                 <View style={styles.devider_View} />
 
-                <TouchableOpacity
-                  style={{ alignSelf: "center", marginTop: 10 }}
-                >
+                <TouchableOpacity style={{alignSelf: 'center', marginTop: 10}}>
                   <CustomText
                     text={"Don't have an account?"}
-                    style={{ fontSize: 14 }}
+                    style={{fontSize: 14}}
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("SignUp")}
-                  style={[styles.container_create, { marginTop: 30 }]}
-                >
-                  <CustomText style={styles.txt} text={"Create an account"} />
+                  onPress={() => navigation.navigate('SignUp')}
+                  style={[styles.container_create, {marginTop: 30}]}>
+                  <CustomText style={styles.txt} text={'Create an account'} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -151,43 +173,43 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: 30,
   },
-  screen_title:{
-    marginTop:30,
-    fontSize:25,
-    fontWeight:'bold'
+  screen_title: {
+    marginTop: 30,
+    fontSize: 25,
+    fontWeight: 'bold',
   },
-  createBtn:{
-    borderWidth:1,
-    height:50,
+  createBtn: {
+    borderWidth: 1,
+    height: 50,
     borderColor: 'white',
-    borderRadius:10,
-    alignItems:'center',
-    justifyContent:'center',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  devider_View:{
-    height:2,
-    backgroundColor:'#D4D4D4',
-    marginTop:30,
-    borderRadius:10
+  devider_View: {
+    height: 2,
+    backgroundColor: '#D4D4D4',
+    marginTop: 30,
+    borderRadius: 10,
   },
   container_create: {
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    backgroundColor:COLORS.black,
-    borderRadius:10,
-    marginTop:10,
-    alignContent:'center',
-    flexDirection:'row'
+    backgroundColor: COLORS.black,
+    borderRadius: 10,
+    marginTop: 10,
+    alignContent: 'center',
+    flexDirection: 'row',
   },
-  txt:{
-    color:COLORS.text_white
+  txt: {
+    color: COLORS.text_white,
   },
   errors: {
     fontSize: 11,
-    fontWeight: "bold",
-    color: "red",
+    fontWeight: 'bold',
+    color: 'red',
     marginTop: 5,
   },
   checkView: {
@@ -195,8 +217,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  termsText:{
-    fontSize:11,
-   
+  termsText: {
+    fontSize: 11,
   },
 });

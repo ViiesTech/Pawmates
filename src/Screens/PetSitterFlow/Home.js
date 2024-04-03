@@ -29,6 +29,7 @@ import axios from 'axios';
 import BasUrl from '../../BasUrl';
 import {useSelector} from 'react-redux';
 import Toast from 'react-native-toast-message';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const Home = ({navigation}) => {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ const Home = ({navigation}) => {
   const [allPets, setAllPets] = useState();
   const cardRef = useRef(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [favourite, setFavourite] = useState(false);
 
   const Data = [
     {
@@ -83,15 +85,14 @@ const Home = ({navigation}) => {
       });
   };
 
-  
   const sendPetRequest = (petId, petOwnnerId) => {
     let data = JSON.stringify({
-      "pet_id": petId,
-      "pet_owner_id": petOwnnerId,
-      "pet_request_send": "send",
-      "check_userrr_id": user.id
+      pet_id: petId,
+      pet_owner_id: petOwnnerId,
+      pet_request_send: 'send',
+      check_userrr_id: user.id,
     });
-    
+
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -99,43 +100,42 @@ const Home = ({navigation}) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      data : data
+      data: data,
     };
-    
-    axios.request(config)
-    .then((response) => {
-      console.log(response.data)
-      if(response.data.success){
-        showToast('success', 'Your request for the pet sitting has been sent 😊')
-        cardRef.current.fadeOutDown(500).then(() => {
-            setCurrentCardIndex(
-              prevIndex => (prevIndex + 1) % allPets.length,
-            );
-            cardRef.current.fadeInUp(500);
-        });
-      }else {
-        showToast('error', response.data.message)
-      }
-    })
-    .catch((error) => {
 
-      showToast('error', error.message)
-    });
-  }
+    axios
+      .request(config)
+      .then(response => {
+        setFavourite(false)
+        if (response.data.success) {
+          showToast(
+            'success',
+            'Your request for the pet sitting has been sent 😊',
+          );
+          cardRef.current.fadeOutDown(500).then(() => {
+            setCurrentCardIndex(prevIndex => (prevIndex + 1) % allPets.length);
+            cardRef.current.fadeInUp(500);
+          });
+        } else {
+          showToast('error', response.data.message);
+        }
+      })
+      .catch(error => {
+        showToast('error', error.message);
+      });
+  };
 
   const removePetFromStack = () => {
     // Fade out the current card
     cardRef.current.fadeOutDown(500).then(() => {
       // Increment the index to show the next card
-      setCurrentCardIndex(
-        prevIndex => (prevIndex + 1) % allPets.length,
-      );
+      setCurrentCardIndex(prevIndex => (prevIndex + 1) % allPets.length);
       // Fade in the next card
       cardRef.current.fadeInUp(500);
     });
-  }
+  };
 
   useEffect(() => {
     getAllPets();
@@ -148,54 +148,67 @@ const Home = ({navigation}) => {
     });
   };
 
+
+  const addToFavourites = (petId, petOwnerId) => {
+    setFavourite(true);
+    let data = JSON.stringify({
+      petId: petId,
+      petOwner_id: petOwnerId,
+    });
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `${BasUrl}/pet/add-favorite`,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then(response => {
+        console.log('response.data ---->>   ', response.data);
+        if (response.data.success) {
+          Toast.show({
+            type: 'success',
+            text1: 'Pet added to favourites!',
+          });
+        } else {
+          setFavourite(false);
+          Toast.show({
+            type: 'error',
+            text1: response.data.message,
+          });
+        }
+      })
+      .catch(error => {
+        setFavourite(false);
+        Toast.show({
+          type: 'error',
+          text1: error.message,
+        });
+      });
+  };
+
   return (
     <FastImage source={images.BackGround} style={{flex: 1}}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.header}>
             <TouchableOpacity
-              onPress={() => {
-                Alert.alert('Log out', 'Are you sure, you want to log out?', [
-                  {
-                    text: 'No',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                  },
-                  {text: 'Yes', onPress: () => dispatch(logOut())},
-                ]);
-              }}
-              style={{
-                alignSelf: 'flex-start',
-                backgroundColor: COLORS.secondary_with_opacity,
-                borderRadius: 10,
-                padding: 10,
-              }}>
-              <Text style={{color: 'white', fontWeight: 'bold', fontSize: 16}}>
-                Log out
-              </Text>
+              onPress={() => navigation.openDrawer()}
+              activeOpacity={0.6}
+              style={{paddingRight: 5}}>
+              <AntDesign name="menu-fold" size={30} color={'black'} />
             </TouchableOpacity>
 
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('NotificationScreenn')}>
-                <FontAwesome name={'bell'} size={30} color={COLORS.black} />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Chats')}
-                style={{
-                  alignSelf: 'flex-start',
-                  backgroundColor: COLORS.primary,
-                  borderRadius: 10,
-                  padding: 10,
-                  marginLeft: 10,
-                }}>
-                <Text
-                  style={{color: 'white', fontWeight: 'bold', fontSize: 16}}>
-                  Chats
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('NotificationScreenn')}>
+              <FontAwesome name={'bell'} size={30} color={COLORS.black} />
+            </TouchableOpacity>
           </View>
 
           {allPets?.length > 0 ? (
@@ -205,12 +218,14 @@ const Home = ({navigation}) => {
               iterationCount={1}
               direction="alternate">
               <FastImage
-                source={{uri: `${BasUrl}/${allPets[currentCardIndex]?.images[0]}`}}
+                source={{
+                  uri: `${BasUrl}/${allPets[currentCardIndex]?.images[0]}`,
+                }}
                 style={{
                   height: hp('50%'),
                   width: wp('90%'),
                   borderRadius: 15,
-                  backgroundColor:'lightgrey'
+                  backgroundColor: 'lightgrey',
                 }}
                 resizeMode="cover">
                 <View style={{height: '64%'}} />
@@ -240,24 +255,39 @@ const Home = ({navigation}) => {
                     />
                   </View>
                   <View style={styles.iconsContainer}>
-                    <TouchableOpacity onPress={removePetFromStack} style={styles.iconsInnerConatiner}>
+                    <TouchableOpacity
+                      onPress={removePetFromStack}
+                      style={styles.iconsInnerConatiner}>
                       <Fontisto
                         name={'close-a'}
                         size={20}
                         color={COLORS.text_white}
                       />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconsInnerConatiner}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        addToFavourites(
+                          allPets[currentCardIndex]?._id,
+                          allPets[currentCardIndex]?.pet_owner_id,
+                        )
+                      }
+                      style={[
+                        styles.iconsInnerConatiner,
+                        favourite ? {backgroundColor: 'white'} : null,
+                      ]}>
                       <Entypo
                         name={'star'}
                         size={30}
-                        color={COLORS.text_white}
+                        color={favourite ? '#F8A756' : COLORS.text_white}
                       />
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={styles.iconsInnerConatiner}
                       onPress={() => {
-                          sendPetRequest(allPets[currentCardIndex]?._id, allPets[currentCardIndex]?.pet_owner_id)
+                        sendPetRequest(
+                          allPets[currentCardIndex]?._id,
+                          allPets[currentCardIndex]?.pet_owner_id,
+                        );
                       }}>
                       <Ionicons
                         name={'checkmark-sharp'}
@@ -281,7 +311,11 @@ const Home = ({navigation}) => {
                 />
                 <CustomText
                   style={{fontSize: hp('1.8%')}}
-                  text={allPets[currentCardIndex]?.pet_descp ? allPets[currentCardIndex]?.pet_descp : 'This is the about info of the pet'}
+                  text={
+                    allPets[currentCardIndex]?.pet_descp
+                      ? allPets[currentCardIndex]?.pet_descp
+                      : 'This is the about info of the pet'
+                  }
                 />
               </View>
 
@@ -304,7 +338,7 @@ const Home = ({navigation}) => {
                     height: '95%',
                     objectFit: 'cover',
                     borderRadius: 16,
-                    backgroundColor: 'lightgrey'
+                    backgroundColor: 'lightgrey',
                   }}
                 />
                 <Image
@@ -316,7 +350,7 @@ const Home = ({navigation}) => {
                     height: '95%',
                     objectFit: 'cover',
                     borderRadius: 16,
-                    backgroundColor: 'lightgrey'
+                    backgroundColor: 'lightgrey',
                   }}
                 />
               </View>

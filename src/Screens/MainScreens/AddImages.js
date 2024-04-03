@@ -49,10 +49,11 @@ const AddImages = ({navigation, route}) => {
       width: 300,
       height: 400,
       mediaType: 'photo',
+      multiple: true,
       cropping: true,
     })
       .then(image => {
-        setPickedImages([...pickedImages, image]);
+        setPickedImages([...pickedImages, ...image]);
       })
       .catch(err => {
         console.log('Some error message occurred with picking images');
@@ -151,13 +152,13 @@ const AddImages = ({navigation, route}) => {
         Your pet images
       </Text>
       <Text style={{color: COLORS.black, width: wp('70%')}}>
-        Please upload images of your pet
+        You can add upto 3 images
       </Text>
 
       <View style={{flexDirection: 'row'}}>
-        {pickedImages.map(eachImg => {
+        {pickedImages.map((eachImg, index) => {
           return (
-            <View style={styles.imageStyling}>
+            <View key={index} style={styles.imageStyling}>
               <Image
                 source={{uri: eachImg.path}}
                 style={{width: '100%', height: '100%', borderRadius: 10}}

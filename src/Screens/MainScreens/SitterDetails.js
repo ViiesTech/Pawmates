@@ -33,7 +33,7 @@ const SitterDetails = ({navigation, route}) => {
       maxBodyLength: Infinity,
       url: `${BasUrl}/pet/owner-req-send`,
       headers: { 
-        'Content-Type': 'application/json', 
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
       data : data
@@ -98,7 +98,7 @@ const SitterDetails = ({navigation, route}) => {
         loading ? (
           <ActivityIndicator size={100} color='black' />
         ) : (
-          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow: 1}}>
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow: 1, paddingBottom: 10}}>
             <View style={{height: 240, paddingLeft: 10}}>
               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
                   {

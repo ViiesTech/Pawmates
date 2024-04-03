@@ -16,12 +16,16 @@ import axios from "axios";
 import { setLocale } from "yup";
 import LoaderModal from "../../Components/LoaderModal";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6'
+import ImagePicker from 'react-native-image-crop-picker';
 
 
 const SignUp = ({ navigation }) => {
   const [checked, setChecked] = useState(false);
   const [option, setOption] = useState('pet owner')
   const [isLoader, setIsLoader] = useState(false);
+  const [pickedImage, setPickedImage] = useState({});
 
   const handleRadioButtonChange = (value) => {
     setOption(value);
@@ -29,41 +33,51 @@ const SignUp = ({ navigation }) => {
 
   const RegisterUser = async (values) => {
     setIsLoader(true);
-    let data = JSON.stringify({
-      "name": values.name,
-      "email": values.email,
-      "password": values.password,
-      "user_type": option
-    });
-    
+    let data = new FormData();
+    data.append('name', values.name);
+    data.append('email', values.email);
+    data.append('password', values.password);
+    data.append('user_type', option);
+    data.append('profileImage', {
+      name: 'image',
+      type: pickedImage.mime,
+      uri: pickedImage.path
+    })
+
     let config = {
       method: 'post',
+      maxBodyLength: Infinity,
       url: `${BasUrl}/user/register`,
-      headers: { 
-        'Content-Type': 'application/json',
+      headers: {
+        'Content-Type': 'multipart/form-data'
       },
       data : data
     };
+
+    if(pickedImage?.path){      
+      if(checked){
+        axios.request(config)
+        .then((response) => {
+          setIsLoader(false)
     
-    if(checked){
-      axios.request(config)
-      .then((response) => {
+          if(response.data.success){
+            showToast('success', 'Account created successfully 😍')
+            navigation.navigate('Login')
+          }else {
+            showToast('error', response.data.message)
+          }
+        })
+        .catch((error) => {
+          setIsLoader(false)
+          showToast('error', error.message)
+        });
+      }else {
         setIsLoader(false)
-  
-        if(response.data.success === 'true'){
-          showToast('success', 'Account created successfully 😍')
-          navigation.navigate('Login')
-        }else {
-          showToast('error', response.data.message)
-        }
-      })
-      .catch((error) => {
-        setIsLoader(false)
-        showToast('error', error.message)
-      });
+        showToast('error', 'Please accept the terms and conditions 😊')
+      }
     }else {
       setIsLoader(false)
-      showToast('error', 'Please accept the terms and conditions 😊')
+      showToast('error', 'Please choose an image 😊')
     }
   };
 
@@ -73,11 +87,41 @@ const SignUp = ({ navigation }) => {
       text1: msg,
     });
   };
+
+  const pickImage = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true
+    }).then(image => {
+      setPickedImage(image);
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
       <BackButton onPressBack={() => navigation.goBack()} />
-      <ScrollView style={{ flex: 1 }}>
-        <View style={{ height: 100 }}></View>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 30 }}>
+        <CustomText
+          text={"Create an account"}
+          style={styles.screen_title}
+        />
+        
+        <TouchableOpacity onPress={pickImage} style={{width: wp('70%'), height: hp('20%'), overflow: 'hidden', backgroundColor: 'lightgrey', borderRadius: 10, alignSelf: 'center', marginTop: hp('2%'), justifyContent: 'center', alignItems: 'center'}}>
+          {
+            Object.values(pickedImage).length > 0 ? (
+              <Image source={{uri: pickedImage.path}} style={{width: '100%', height: '100%', objectFit:'cover'}} />
+            ) : (
+              <View style={{alignItems: 'center'}}>
+                <FontAwesome6 name='user-large' size={35} color={'grey'} />
+                <Text style={{color: 'grey', fontSize: hp('1.8%'), marginTop: hp('1%')}}>Choose image</Text>
+              </View>
+            )
+          }
+        </TouchableOpacity>
         <Formik
           initialValues={{
             name: "",
@@ -102,10 +146,6 @@ const SignUp = ({ navigation }) => {
           }) => (
             <View style={styles.main_container}>
               <View style={styles.container}>
-                <CustomText
-                  text={"Create an account"}
-                  style={styles.screen_title}
-                />
                 <InputField
                   placeholder={"Full Name"}
                   value={values.name}
@@ -153,7 +193,7 @@ const SignUp = ({ navigation }) => {
                   />
                 )}
 
-                <View style={styles.checkView}>
+                <View style={[styles.checkView, {marginLeft: -10}]}>
                   <RadioButton
                     value="first"
                     color={COLORS.primary}
@@ -218,6 +258,7 @@ const SignUp = ({ navigation }) => {
           )}
         </Formik>
       </ScrollView>
+
       <Toast />
     </FastImage>
   );
@@ -235,7 +276,10 @@ const styles = StyleSheet.create({
   },
   screen_title: {
     marginTop: 20,
-    fontSize: 25,
+    marginBottom: 30,
+    width: wp('85%'),
+    alignSelf: 'center',
+    fontSize: hp('3.4%'),
     fontWeight: 'bold',
   },
   createBtn: {
@@ -251,6 +295,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: 'row',
     alignItems: 'center',
+    width: wp('90%'),
+    alignSelf: 'center'
   },
   termsText:{
     fontSize:11,

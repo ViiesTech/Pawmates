@@ -5,7 +5,6 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import FastImage from 'react-native-fast-image';
 // import endpoint from '../utils/endpoint';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -18,7 +17,7 @@ const ChatHeader = ({userData, onBackPress, onBlockPress, onDeletePress, blocked
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.primary} />
       <AntDesign name='arrowleft' size={25} color={'black'} style={{paddingRight: 15, paddingLeft: 5, paddingVertical: 10, marginRight: 5}} onPress={onBackPress} />
-      <FastImage
+      <Image
         style={styles.image}
         source={images.petAvatar}
       />

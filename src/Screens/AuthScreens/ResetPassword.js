@@ -39,7 +39,7 @@ const ResetPassword = ({ navigation, route }) => {
     .then((response) => {
       setIsLoader(false)
 
-      if(response.data.success === 'true'){
+      if(response.data.success){
         showToast('success', response.data.message)
         navigation.navigate('Login')
       }else {

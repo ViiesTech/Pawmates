@@ -99,11 +99,11 @@ const AddSitterDetails = ({navigation, route}) => {
     
     return (
         <FastImage source={images.BackGround} style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
-            <BackButton onPressBack={() => navigation.goBack()} style={{position: 'absolute', top: 10, left: 6, zIndex: 20}} />
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow: 1, justifyContent: 'center', paddingTop: 50, paddingBottom: 50}}>
+            <BackButton onPressBack={() => navigation.goBack()} style={{position: 'absolute', top: -10, left: -10, zIndex: 20}} />
 
             <Text style={[styles.HeadingText, {marginBottom: -5}]}>Location</Text>
-            <InputField placeholder={'Write your address'} value={location} onChangeText={changedText => setLocation(changedText)}  />
+            <InputField placeholder={'Write your address'} value={location} onChangeText={changedText => setLocation(changedText)} containerStyle={{width: wp('85%')}}  />
 
             <Text style={[styles.HeadingText, {marginTop: 20}]}>What kind of pets you can take care of?</Text>
             <View style={{flexDirection: 'row', justifyContent:'flex-start', flexWrap: 'wrap', alignItems:'center'}}>

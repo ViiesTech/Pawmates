@@ -70,6 +70,7 @@ const Service = ({navigation, route}) => {
         <InputField
           placeholder={"Your pet's age"}
           value={age}
+          keyboardType={'number-pad'}
           onChangeText={changedText => setAge(changedText)}
         />
         <InputField

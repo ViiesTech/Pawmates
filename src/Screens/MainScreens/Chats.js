@@ -18,7 +18,7 @@ import {
   import AntDesign from 'react-native-vector-icons/AntDesign';
   import Header from '../../Components/Header';
   import {useSelector} from 'react-redux';
-  import firestore from '@react-native-firebase/firestore';
+  // import firestore from '@react-native-firebase/firestore';
   import axios from 'axios';
   import Button from '../../Components/Button';
   import Bottleneck from 'bottleneck';
@@ -63,63 +63,63 @@ import {
     });
   
     const getAllChats = () => {
-      firestore()
-        .collection('chats')
-        .where('ids', 'array-contains', `${user.id}`)
-        .orderBy('lastMessageTime', 'desc')
-        .onSnapshot(snapshot => {
-          const chatsData = [];
-          snapshot?.forEach(eachChat => {
-            const chatId = eachChat.data().ids.filter(id => {
-              return id !== `${user.id}`;
-            });
+      // firestore()
+      //   .collection('chats')
+      //   .where('ids', 'array-contains', `${user.id}`)
+      //   .orderBy('lastMessageTime', 'desc')
+      //   .onSnapshot(snapshot => {
+      //     const chatsData = [];
+      //     snapshot?.forEach(eachChat => {
+      //       const chatId = eachChat.data().ids.filter(id => {
+      //         return id !== `${user.id}`;
+      //       });
   
-            chatsData.push({
-              ...eachChat.data(),
-              chatId,
-            });
-          });
+      //       chatsData.push({
+      //         ...eachChat.data(),
+      //         chatId,
+      //       });
+      //     });
   
-          Promise.all(
-            chatsData.map(chat => {
-              return limiter.schedule(async () => {
-                try {
-                  let config = {
-                    method: 'get',
-                    url: `https://customdemo.website/apps/spill-app/public/api/user/${chat.chatId}`,
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                  };
-                  const response = await axios.request(config);
-                  if (response.data.success) {
-                    return {
-                      ...response.data.data,
-                      lastMessage: chat.lastMessage.text,
-                      lastMessageTime: chat.lastMessageTime,
-                    };
-                  } else {
-                    console.log('there is a error ');
-                    return null;
-                  }
-                } catch (error) {
-                  console.error(error);
-                  return null;
-                }
-              });
-            }),
-          )
-            .then(userData => {
-              // Filter out null values from the array
-              const validUserData = userData.filter(user => user !== null);
-              setChats(validUserData);
-              setChatLoading(false);
-            })
-            .catch(error => {
-              console.error(error);
-              setChatLoading(false);
-            });
-        })
+      //     Promise.all(
+      //       chatsData.map(chat => {
+      //         return limiter.schedule(async () => {
+      //           try {
+      //             let config = {
+      //               method: 'get',
+      //               url: `https://customdemo.website/apps/spill-app/public/api/user/${chat.chatId}`,
+      //               headers: {
+      //                 Authorization: `Bearer ${token}`,
+      //               },
+      //             };
+      //             const response = await axios.request(config);
+      //             if (response.data.success) {
+      //               return {
+      //                 ...response.data.data,
+      //                 lastMessage: chat.lastMessage.text,
+      //                 lastMessageTime: chat.lastMessageTime,
+      //               };
+      //             } else {
+      //               console.log('there is a error ');
+      //               return null;
+      //             }
+      //           } catch (error) {
+      //             console.error(error);
+      //             return null;
+      //           }
+      //         });
+      //       }),
+      //     )
+      //       .then(userData => {
+      //         // Filter out null values from the array
+      //         const validUserData = userData.filter(user => user !== null);
+      //         setChats(validUserData);
+      //         setChatLoading(false);
+      //       })
+      //       .catch(error => {
+      //         console.error(error);
+      //         setChatLoading(false);
+      //       });
+      //   })
     };
   
   

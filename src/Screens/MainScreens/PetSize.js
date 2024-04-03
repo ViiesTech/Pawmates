@@ -45,7 +45,7 @@ const PetSize = ({navigation, route}) => {
   
   return (
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+      <ScrollView contentContainerStyle={{flexGrow: 1, paddingBottom: 30}}>
 
       <BackButton onPressBack={() => navigation.goBack()} />
       <Headertext />
@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     marginTop: 20,
+    paddingBottom: 20
   },
   header: {
     alignSelf: "center",

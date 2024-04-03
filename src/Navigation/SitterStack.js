@@ -1,6 +1,8 @@
 import React from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
+import CustomDrawer from "./CustomDrawer";
+
 import Home from "../Screens/PetSitterFlow/Home";
 import YourGender from "../Screens/PetSitterFlow/YourGender";
 import AddSitterDetails from "../Screens/PetSitterFlow/AddSitterDetails";
@@ -11,17 +13,24 @@ import Chats from "../Screens/PetSitterFlow/Chats";
 import ChatScreen from "../Screens/PetSitterFlow/ChatScreen";
 import NotificationScreenn from "../Screens/PetSitterFlow/NotificationScreenn";
 import ServicesYouGive from "../Screens/PetSitterFlow/ServicesYouGive";
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import Calendar from "../Screens/PetSitterFlow/Calendar";
+import Gallery from "../Screens/PetSitterFlow/Gallery";
+import EditProfile from "../Screens/PetSitterFlow/EditProfile";
+import AddGalleryImages from "../Screens/PetSitterFlow/AddGalleryImages";
+import FavouritePets from "../Screens/PetSitterFlow/FavouritePets";
 
 import { useSelector } from "react-redux";
+import Dashboard from "../Screens/PetSitterFlow/Dashboard";
 
 const Stack = createStackNavigator();
-const SitterStack = () => {
+const Drawer = createDrawerNavigator();
+
+const DrawerStack = () => {
   const {user} = useSelector(state => state.authData);
-  
+
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false }}
-    >
+    <Drawer.Navigator screenOptions={{headerShown: false}} drawerContent={props => <CustomDrawer {...props} />} >
       {
         !user.petSitter_update_status ? (
           <>
@@ -33,14 +42,19 @@ const SitterStack = () => {
           </>
         ) : null
       }
-
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Chats" component={Chats} />
-      <Stack.Screen name="ChatScreen" component={ChatScreen} />
+      <Stack.Screen name="Dashboard" component={Dashboard} />
       <Stack.Screen name="NotificationScreenn" component={NotificationScreenn} />
       <Stack.Screen name="Profile" component={Profile} />
-    </Stack.Navigator>
-  );
+      <Drawer.Screen name="Chats" component={Chats} />
+      <Drawer.Screen name="ChatScreen" component={ChatScreen} />
+      <Drawer.Screen name="Calendar" component={Calendar} />
+      <Drawer.Screen name="Gallery" component={Gallery} />
+      <Drawer.Screen name="EditProfile" component={EditProfile} />
+      <Drawer.Screen name="AddGalleryImages" component={AddGalleryImages} />
+      <Drawer.Screen name="FavouritePets" component={FavouritePets} />
+    </Drawer.Navigator>
+  )
 }
 
-export default SitterStack
+export default DrawerStack

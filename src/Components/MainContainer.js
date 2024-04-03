@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import FastImage from 'react-native-fast-image'
 import images from '../Constants/images'
+import FastImage from 'react-native-fast-image'
 
 const MainContainer = ({childern, style}) => {
   return (
