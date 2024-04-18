@@ -17,9 +17,10 @@ import { useSelector } from 'react-redux';
 import axios, { all } from 'axios';
 import BasUrl from '../../BasUrl';
 import Toast from 'react-native-toast-message';
+import firestore from '@react-native-firebase/firestore';
 
 const NotificationScreen = ({navigation}) => {
-    const {token} = useSelector(state => state.authData);
+    const {token, user} = useSelector(state => state.authData);
     const [allRequests, setAllRequests] = useState([])
 
     const fetchAllRequests = () => {
@@ -46,7 +47,7 @@ const NotificationScreen = ({navigation}) => {
     }
 
 
-    const acceptRequest = (petRequestId) => {
+    const acceptRequest = (petRequestId, myId, otherUserId) => {
         let data = JSON.stringify({
             petownerrequest_id: petRequestId,
             pet_sitter_accept_status: "accept"
@@ -56,7 +57,7 @@ const NotificationScreen = ({navigation}) => {
             method: 'post',
             maxBodyLength: Infinity,
             url: `${BasUrl}/pet/sitter-req-accept-status`,
-            headers: { 
+            headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
             },
@@ -67,6 +68,7 @@ const NotificationScreen = ({navigation}) => {
           .then((response) => {
             if(response.data.success){
                 fetchAllRequests()
+                makeRequestAcceptedTrue(myId, otherUserId);
                 showToast('success', 'You have been successfully hired by this pet owner')
             }else {
                 showToast('error', response.data.message)
@@ -75,6 +77,55 @@ const NotificationScreen = ({navigation}) => {
           .catch((error) => {
             showToast('error', error.message)
         });
+    }
+
+    const makeRequestAcceptedTrue = (myId, otherUserId) => {
+        firestore()
+        .collection('users')
+        .doc(myId)
+        .get()
+        .then((snapshot) => {
+          const allChats = snapshot.data()?.allChats;
+          const currentChat = allChats.filter(eachChat => eachChat.ids.includes(otherUserId))
+          const otherChats = allChats.filter(eachChat => !eachChat.ids.includes(otherUserId))
+
+          if(currentChat.length > 0){
+              currentChat[0].requestAccepted = true
+              firestore()
+              .collection('users')
+              .doc(user.id)
+              .update({
+                allChats: [
+                  ...otherChats,
+                  ...currentChat
+                ]
+              })
+          }
+        });
+
+        firestore()
+        .collection('users')
+        .doc(otherUserId)
+        .get()
+        .then((snapshot) => {
+          const allChats = snapshot.data()?.allChats;
+          const currentChat = allChats.filter(eachChat => eachChat.ids.includes(myId))
+          const otherChats = allChats.filter(eachChat => !eachChat.ids.includes(myId))
+
+          if(currentChat.length > 0){
+              currentChat[0].requestAccepted = true
+              firestore()
+              .collection('users')
+              .doc(user.id)
+              .update({
+                allChats: [
+                  ...otherChats,
+                  ...currentChat
+                ]
+              })
+          }
+        });
+
     }
 
     const rejectRequest = (petRequestId) => {
@@ -133,13 +184,13 @@ const NotificationScreen = ({navigation}) => {
                 data={allRequests}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => {
-                    console.log("@@@@@@@@@->>   ", item.pet_images[0])
+                    // console.log("@@@@@@@@@->>   ", item.pet_images[0])
                     if(item?.pet_sitter_accept_status === 'pending'){
                         return (
                             <View style={{ width: wp('90%'), backgroundColor: "white", borderRadius: 10, marginTop: 10, paddingVertical: 10 }}>
                                 <View style={{width: wp('88%'), marginVertical: 10, backgroundColor: "white", borderRadius: 10, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', paddingHorizontal: 10, justifyContent: 'space-between' }}>
 
-                                    <View style={{ flexDirection: 'row' }}>
+                                    <View style={{ flexDirection: 'row', width: '100%' }}>
                                         {
                                             item?.pet_images?.length > 0 ? (
                                                 <Image source={{uri: `${BasUrl}/${item?.pet_images[0]}`}} style={{width: 60, height: 60, borderRadius: 4, backgroundColor: 'grey'}} />
@@ -155,6 +206,9 @@ const NotificationScreen = ({navigation}) => {
                                             <Text style={[styles.HeadingText, { fontWeight: 'bold' }]}>{`${item?.pet_nickname}, ${item?.pet_age}`}</Text>
                                             <Text style={[styles.HeadingText,]}>55 km, Art. Director</Text>
                                         </View>
+                                        <TouchableOpacity onPress={() => navigation.navigate('ChatScreen', {otherUserId: item.pet_owner_sender_id, requestAccepted: false, userData: {user_name: item.pet_owner_name}})} style={{ position: 'absolute', right: 0, height: 40, width: '30%', backgroundColor: COLORS.primary, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                                            <Text style={{ color: 'white' }}>Chat</Text>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
 
@@ -170,7 +224,7 @@ const NotificationScreen = ({navigation}) => {
                                 </View>
 
                                 <View style={{flexDirection: 'row', marginVertical: 10, alignItems:'center', justifyContent: 'space-between', width: '100%', paddingHorizontal: 10, alignSelf: 'center'}}>
-                                    <TouchableOpacity onPress={() => acceptRequest(item?._id)} style={{ height: 40, width: '48%', backgroundColor: COLORS.secondary_with_opacity, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                                    <TouchableOpacity onPress={() => acceptRequest(item?._id, user.id, item.pet_owner_sender_id)} style={{ height: 40, width: '48%', backgroundColor: COLORS.secondary_with_opacity, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
                                         <Text style={{ color: 'white' }}>Accept</Text>
                                     </TouchableOpacity>
 
@@ -216,7 +270,7 @@ const NotificationScreen = ({navigation}) => {
                                 </View>
 
                                 <View style={{flexDirection: 'row', marginVertical: 10, alignItems:'center', justifyContent: 'space-between', width: '100%', paddingHorizontal: 10, alignSelf: 'center'}}>
-                                    <TouchableOpacity style={{ height: 40, width: '100%', backgroundColor: COLORS.primary, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                                    <TouchableOpacity onPress={() => navigation.navigate('ChatScreen', {otherUserId: item.pet_owner_sender_id, requestAccepted: true, userData: {user_name: item.pet_owner_name}})} style={{ height: 40, width: '100%', backgroundColor: COLORS.primary, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
                                         <Text style={{ color: 'white' }}>Chat</Text>
                                     </TouchableOpacity>
                                 </View>

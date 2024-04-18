@@ -27,10 +27,19 @@ const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const DrawerStack = () => {
-  const {user} = useSelector(state => state.authData);
 
   return (
     <Drawer.Navigator screenOptions={{headerShown: false}} drawerContent={props => <CustomDrawer {...props} />} >
+      <Drawer.Screen name="Home" component={Home} />
+    </Drawer.Navigator>
+  )
+}
+
+const SitterStack = () => {
+  const {user} = useSelector(state => state.authData);
+  
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       {
         !user.petSitter_update_status ? (
           <>
@@ -42,19 +51,20 @@ const DrawerStack = () => {
           </>
         ) : null
       }
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="DrawerStack" component={DrawerStack} />
+      {/* <Stack.Screen name="Home" component={Home} /> */}
+      <Stack.Screen name="Chats" component={Chats} />
+      <Stack.Screen name="ChatScreen" component={ChatScreen} />
       <Stack.Screen name="Dashboard" component={Dashboard} />
       <Stack.Screen name="NotificationScreenn" component={NotificationScreenn} />
       <Stack.Screen name="Profile" component={Profile} />
-      <Drawer.Screen name="Chats" component={Chats} />
-      <Drawer.Screen name="ChatScreen" component={ChatScreen} />
-      <Drawer.Screen name="Calendar" component={Calendar} />
-      <Drawer.Screen name="Gallery" component={Gallery} />
-      <Drawer.Screen name="EditProfile" component={EditProfile} />
-      <Drawer.Screen name="AddGalleryImages" component={AddGalleryImages} />
-      <Drawer.Screen name="FavouritePets" component={FavouritePets} />
-    </Drawer.Navigator>
+      <Stack.Screen name="FavouritePets" component={FavouritePets} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="Gallery" component={Gallery} />
+      <Stack.Screen name="AddGalleryImages" component={AddGalleryImages} />
+      <Stack.Screen name="Calendar" component={Calendar} />
+    </Stack.Navigator>
   )
 }
 
-export default DrawerStack
+export default SitterStack;

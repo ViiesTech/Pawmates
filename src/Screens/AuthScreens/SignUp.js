@@ -19,6 +19,8 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6'
 import ImagePicker from 'react-native-image-crop-picker';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 
 
 const SignUp = ({ navigation }) => {
@@ -30,6 +32,16 @@ const SignUp = ({ navigation }) => {
   const handleRadioButtonChange = (value) => {
     setOption(value);
   };
+
+  const uploadFile = async (path) => {
+    const randomRef = Math.ceil(Math.random() * 1000000);
+    const fileRef = storage().ref(`${randomRef}`);
+    await fileRef.putFile(path);
+    return await fileRef.getDownloadURL();
+  };
+
+
+  console.log(pickedImage.path)
 
   const RegisterUser = async (values) => {
     setIsLoader(true);
@@ -57,13 +69,33 @@ const SignUp = ({ navigation }) => {
     if(pickedImage?.path){      
       if(checked){
         axios.request(config)
-        .then((response) => {
-          setIsLoader(false)
-    
+        .then(async(response) => {
+
           if(response.data.success){
-            showToast('success', 'Account created successfully 😍')
-            navigation.navigate('Login')
+
+            const imageUploadPath = await uploadFile(pickedImage.path);
+            firestore()
+            .collection('users')
+            .doc(`${response.data._id}`)
+            .set({
+              name: values.name,
+              profileImage: imageUploadPath,
+              email: values.email,
+              id: response.data._id,
+              user_type: option
+            })
+            .then(() => {
+              setIsLoader(false);
+              showToast('success', 'Account created successfully 😍')
+              navigation.navigate('Login')
+            })
+            .catch((err) => {
+              setIsLoader(false)
+              console.log("Error with firebase firestore ---->   ", err)
+            });
+            
           }else {
+            setIsLoader(false)
             showToast('error', response.data.message)
           }
         })
@@ -194,17 +226,24 @@ const SignUp = ({ navigation }) => {
                 )}
 
                 <View style={[styles.checkView, {marginLeft: -10}]}>
+                  <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 5}}>
+                  <View style={{backgroundColor: 'white', borderRadius: 50, borderWidth: 1, marginRight: 10}}>
                   <RadioButton
                     value="first"
                     color={COLORS.primary}
                     uncheckedColor="#949494"
                     status={option === "pet owner" ? "checked" : "unchecked"}
                     onPress={() => handleRadioButtonChange("pet owner")}
-                  />
+                    />
+                  </View>
                   <CustomText
                     text={"Sign up as a Pet Owner "}
                     style={styles.termsText}
                   />
+                  </View>
+
+                  <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 5}}>
+                  <View style={{backgroundColor: 'white', borderRadius: 50, borderWidth: 1, marginRight: 10}}>
                   <RadioButton
                     value="second"
                     color={COLORS.primary}
@@ -212,10 +251,12 @@ const SignUp = ({ navigation }) => {
                     status={option === "pet sitter" ? "checked" : "unchecked"}
                     onPress={() => handleRadioButtonChange("pet sitter")}
                   />
+                  </View>
                   <CustomText
                     text={"Sign up as a Pet Sitter"}
                     style={styles.termsText}
                   />
+                  </View>
                 </View>
 
                 {/* Terms and conditions checkbox */}
@@ -296,7 +337,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: wp('90%'),
-    alignSelf: 'center'
+    alignSelf: 'center',
+    // backgroundColor: 'purple',
+    flexWrap: 'wrap'
   },
   termsText:{
     fontSize:11,

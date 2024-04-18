@@ -19,8 +19,9 @@ import BasUrl from '../../BasUrl';
 import Toast from 'react-native-toast-message';
 
 const Notifications = ({navigation}) => {
-    const {token} = useSelector(state => state.authData);
+    const {token, user} = useSelector(state => state.authData);
     const [allRequests, setAllRequests] = useState([])
+
 
     const fetchAllRequests = () => {
         let config = {

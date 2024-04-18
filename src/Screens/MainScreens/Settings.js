@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {
   widthPercentageToDP as wp,
@@ -55,7 +55,12 @@ const Settings = ({navigation}) => {
       />
 
       <InnerButton
-        onPress={() => dispatch(logOut())}
+        onPress={() => Alert.alert('Log out alert!', 'Are you sure, you want to log out?', [
+          {
+            text: 'Yes',
+            onPress: () => dispatch(logOut())
+          }
+        ])}
         buttonText={'Log out'}
         style={{
           width: wp('90%'),

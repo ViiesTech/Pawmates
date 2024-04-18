@@ -25,7 +25,7 @@ const ChatCard = ({
 
         {/* left container that has username, profilepc and last message */}
         <View style={styles.leftContainer}>
-          <Image source={images.cat1} style={styles.image} />
+          <Image source={{uri: userAvatar}} style={styles.image} />
           <View style={{marginLeft: 8}}>
             <Text style={styles.username}>{username}</Text>
             <Text style={styles.lastMessage}>{lastMessage}</Text>

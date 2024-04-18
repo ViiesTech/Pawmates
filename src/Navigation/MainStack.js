@@ -11,8 +11,9 @@ import Settings from "../Screens/MainScreens/Settings";
 import AddImages from "../Screens/MainScreens/AddImages";
 import Home from "../Screens/MainScreens/Home";
 import SearchResults from "../Screens/MainScreens/SearchResults";
-import Chats from "../Screens/PetSitterFlow/Chats";
+import Chats from "../Screens/MainScreens/Chats";
 import SitterDetails from "../Screens/MainScreens/SitterDetails";
+import ChatScreen from "../Screens/MainScreens/ChatScreen";
 
 import { useSelector } from "react-redux";
 
@@ -36,6 +37,7 @@ const MainStack = () => {
       <Stack.Screen name="SearchResults" component={SearchResults} />
       <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="Chats" component={Chats} />
+      <Stack.Screen name="ChatScreen" component={ChatScreen} />
       <Stack.Screen name="SitterDetails" component={SitterDetails} />
     </Stack.Navigator>
   );

@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView } from "react-native";
 import React, { useState } from "react";
 import FastImage from "react-native-fast-image";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
@@ -44,6 +44,7 @@ const PetSize = ({navigation, route}) => {
   
   
   return (
+    <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column',justifyContent: 'center',}} behavior="padding" enabled  >
     <FastImage source={images.BackGround} style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{flexGrow: 1, paddingBottom: 30}}>
 
@@ -101,6 +102,7 @@ const PetSize = ({navigation, route}) => {
       </View>
       </ScrollView>
     </FastImage>
+    </KeyboardAvoidingView>
   );
 };
 

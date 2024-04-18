@@ -17,6 +17,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 // import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import Entypo from 'react-native-vector-icons/Entypo';
 import FastImage from 'react-native-fast-image';
 
 const Home = ({navigation}) => {
@@ -61,7 +62,10 @@ const Home = ({navigation}) => {
         <ImageBackground source={images.BackGround} style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
             <View style={{width: wp('88%'), flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center'}}>
                 <Fontisto name="player-settings" size={25} color={'black'} onPress={() => navigation.navigate('Settings')}  />
-                <Fontisto name="bell-alt" size={25} color={'black'} onPress={() => navigation.navigate('Notifications')} />
+                <View style={{flexDirection: 'row'}}>
+                    <Entypo name="chat" size={28} color={'black'} style={{marginRight: 20}} onPress={() => navigation.navigate('Chats')} />
+                    <Fontisto name="bell-alt" size={25} color={'black'} onPress={() => navigation.navigate('Notifications')} />
+                </View>
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow: 1}}>

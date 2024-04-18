@@ -356,7 +356,7 @@ const Home = ({navigation}) => {
               </View>
             </Animatable.View>
           ) : (
-            <Text>Not Found</Text>
+            <Text>No Pets Found</Text>
           )}
         </View>
       </ScrollView>

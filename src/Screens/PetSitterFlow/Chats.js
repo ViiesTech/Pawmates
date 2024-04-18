@@ -19,7 +19,8 @@ import ChatCard from '../../Components/ChatCard';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Header from '../../Components/Header';
 import {useSelector} from 'react-redux';
-// import firestore from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
 import axios from 'axios';
 import Button from '../../Components/Button';
 import Bottleneck from 'bottleneck';
@@ -32,6 +33,8 @@ const Chats = ({navigation}) => {
   const [chatLoading, setChatLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [filteredChats, setFilteredChats] = useState('');
+  const [upcomingUsersExists, setUpcomingUsersExists] = useState(false);
+  const [bookedUsersExists, setBookedUsersExists] = useState(false);
 
   useEffect(() => {
     return navigation.addListener('focus', () => {
@@ -65,63 +68,53 @@ const Chats = ({navigation}) => {
   });
 
   const getAllChats = () => {
-    // firestore()
-    //   .collection('chats')
-    //   .where('ids', 'array-contains', `${user.id}`)
-    //   .orderBy('lastMessageTime', 'desc')
-    //   .onSnapshot(snapshot => {
-    //     const chatsData = [];
-    //     snapshot?.forEach(eachChat => {
-    //       const chatId = eachChat.data().ids.filter(id => {
-    //         return id !== `${user.id}`;
-    //       });
+    setChatLoading(true);
 
-    //       chatsData.push({
-    //         ...eachChat.data(),
-    //         chatId,
-    //       });
-    //     });
+    const unsubscribe = firestore()
+      .collection('users')
+      .doc(user.id)
+      .onSnapshot(snapshot => {
+        const chatsData = [];
+        snapshot.data()?.allChats.forEach(eachChat => {
+          const chatId = eachChat.ids.filter(id => {
+            return id !== `${user.id}`;
+          });
 
-    //     Promise.all(
-    //       chatsData.map(chat => {
-    //         return limiter.schedule(async () => {
-    //           try {
-    //             let config = {
-    //               method: 'get',
-    //               url: `https://customdemo.website/apps/spill-app/public/api/user/${chat.chatId}`,
-    //               headers: {
-    //                 Authorization: `Bearer ${token}`,
-    //               },
-    //             };
-    //             const response = await axios.request(config);
-    //             if (response.data.success) {
-    //               return {
-    //                 ...response.data.data,
-    //                 lastMessage: chat.lastMessage.text,
-    //                 lastMessageTime: chat.lastMessageTime,
-    //               };
-    //             } else {
-    //               console.log('there is a error ');
-    //               return null;
-    //             }
-    //           } catch (error) {
-    //             console.error(error);
-    //             return null;
-    //           }
-    //         });
-    //       }),
-    //     )
-    //       .then(userData => {
-    //         // Filter out null values from the array
-    //         const validUserData = userData.filter(user => user !== null);
-    //         setChats(validUserData);
-    //         setChatLoading(false);
-    //       })
-    //       .catch(error => {
-    //         console.error(error);
-    //         setChatLoading(false);
-    //       });
-    //   })
+          chatsData.push({
+            ...eachChat,
+            chatId,
+          });
+        });
+        
+        chatsData.sort((a, b) => b.createdAt - a.createdAt);
+        Promise.all(
+          chatsData.map(async chat => {
+            const userSnapshot = await firestore()
+              .collection('users')
+              .doc(`${chat.chatId}`)
+              .get();
+
+            return {
+              ...userSnapshot.data(),
+              lastMessage: chat.lastMessage.text,
+              lastMessageTime: chat.createdAt,
+              requestAccepted: chat.requestAccepted
+            };
+          }),
+        )
+          .then(userData => {
+            setChats(userData);
+            setChatLoading(false);
+          })
+          .catch(error => {
+            console.error(error);
+            setChatLoading(false);
+          });
+      });
+
+    return () => {
+      unsubscribe();
+    };
   };
 
 
@@ -129,37 +122,79 @@ const Chats = ({navigation}) => {
     setSearchText(changedText);
 
     const theFilteredChats = chats.filter(chat => {
-      return chat.user_name.toLowerCase().includes(changedText.toLowerCase());
+      return chat.name.toLowerCase().includes(changedText.toLowerCase());
     });
     setFilteredChats(theFilteredChats);
   };
 
-  const renderChatCard = ({item}) => {
-    if (chats) {
-      return (
-        <View style={{marginVertical: 10}}>
-          <ChatCard
-            onPress={() =>
-              navigation.navigate('ChatScreen', {
-                otherUserId: item.user_id,
-                navigatedFrom: 'chats',
-                userData: {
-                  user_name: item.user_name,
-                  user_profile_image: item.user_profile_image,
-                  fcm_token: item.fcm_token,
-                },
-              })
-            }
-            username={item.user_name}
-            userAvatar={item.user_profile_image}
-            lastMessage={item.lastMessage}
-            lastMessageTime={formatDateinHours(item.lastMessageTime)}
-          />
-        </View>
-      );
-    } else {
-      <Text>Currently you have not chats</Text>;
+  
+  const renderChatCard = ({item, index}) => {
+    if(!item?.requestAccepted){
+      setUpcomingUsersExists(true)
+    }else if(item?.requestAccepted){
+      setBookedUsersExists(true)
     }
+
+    return (
+      <View index ={index}>
+      {
+        selectedOption === 'upcoming' && !item?.requestAccepted ? (
+            <View style={{marginVertical: 10}}>
+              <ChatCard
+                onPress={() =>
+                  navigation.navigate('ChatScreen', {
+                    otherUserId: item.id,
+                    navigatedFrom: 'chats',
+                    userData: {
+                      user_name: item.name,
+                      user_profile_image: item.profileImage,
+                      // fcm_token: item.fcm_token,
+                    },
+                  })
+                }
+                username={item.name}
+                userAvatar={item.profileImage}
+                lastMessage={item.lastMessage}
+                lastMessageTime={formatDateinHours(item.lastMessageTime)}
+              />
+            </View>
+          ) : selectedOption === 'upcoming' && !upcomingUsersExists && index===0 ? (
+            <Text style={styles.warningText}>
+              You don't have any chats here.
+            </Text>
+          ) : null
+      }
+      {
+        selectedOption === 'booked' && item?.requestAccepted ? (
+          <View style={{marginVertical: 10}}>
+            <ChatCard
+              onPress={() =>
+                navigation.navigate('ChatScreen', {
+                  otherUserId: item.id,
+                  navigatedFrom: 'chats',
+                  userData: {
+                    user_name: item.name,
+                    user_profile_image: item.profileImage,
+                    // fcm_token: item.fcm_token,
+                  },
+                })
+              }
+              username={item.name}
+              userAvatar={item.profileImage}
+              lastMessage={item.lastMessage}
+              lastMessageTime={formatDateinHours(item.lastMessageTime)}
+            />
+          </View>
+        ) : selectedOption === 'booked' && !bookedUsersExists && index===0? (
+          <Text style={styles.warningText}>
+            You don't have any chats here.
+          </Text>
+        ) : null
+      }
+      </View>
+    )
+    
+
   };
 
   return (
@@ -208,18 +243,19 @@ const Chats = ({navigation}) => {
               style={{marginVertical: 80}}
             />
           </>
-        ) : chats.length > 0 ? (
+        ) : (
           <FlatList
             data={searchText ? filteredChats: chats}
             renderItem={renderChatCard}
             showsVerticalScrollIndicator={false}
+            ListEmptyComponent={() => {
+              return (
+                <Text style={styles.warningText}>
+                  You don't have any chats with people.
+                </Text>
+                )
+            }}
           />
-        ) : (
-          <>
-            <Text style={styles.warningText}>
-              You don't have any chats with people.
-            </Text>
-          </>
         )}
       </View>
     </View>
