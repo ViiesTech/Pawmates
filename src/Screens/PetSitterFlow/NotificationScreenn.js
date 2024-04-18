@@ -92,14 +92,14 @@ const NotificationScreen = ({navigation}) => {
           if(currentChat.length > 0){
               currentChat[0].requestAccepted = true
               firestore()
-              .collection('users')
-              .doc(user.id)
-              .update({
-                allChats: [
-                  ...otherChats,
-                  ...currentChat
-                ]
-              })
+                .collection('users')
+                .doc(user.id)
+                .update({
+                    allChats: [
+                    ...otherChats,
+                    ...currentChat
+                    ]
+                })
           }
         });
 
@@ -270,7 +270,7 @@ const NotificationScreen = ({navigation}) => {
                                 </View>
 
                                 <View style={{flexDirection: 'row', marginVertical: 10, alignItems:'center', justifyContent: 'space-between', width: '100%', paddingHorizontal: 10, alignSelf: 'center'}}>
-                                    <TouchableOpacity onPress={() => navigation.navigate('ChatScreen', {otherUserId: item.pet_owner_sender_id, requestAccepted: true, userData: {user_name: item.pet_owner_name}})} style={{ height: 40, width: '100%', backgroundColor: COLORS.primary, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                                    <TouchableOpacity onPress={() => navigation.navigate('ChatScreen', {otherUserId: item.pet_owner_sender_id, requestAccepted: true, userData: {user_name: item.pet_owner_name, image_uri: `${BasUrl}/${item?.pet_images[0]}`}})} style={{ height: 40, width: '100%', backgroundColor: COLORS.primary, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
                                         <Text style={{ color: 'white' }}>Chat</Text>
                                     </TouchableOpacity>
                                 </View>

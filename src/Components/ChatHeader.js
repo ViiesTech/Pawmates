@@ -9,15 +9,10 @@ import {
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import images from '../Constants/images';
-import { useSelector } from 'react-redux';
 import FastImage from 'react-native-fast-image';
-import BasUrl from '../BasUrl';
 
 const ChatHeader = ({userData, onBackPress, onBlockPress, onDeletePress, blocked, onUnblockPress}) => {
   const [openOptions, setOpenOptions] = useState(false)
-  const {user} = useSelector(state => state.authData);
-
-  // console.log("USER DATA ------>    ", userData)
 
   return (
     <View style={styles.container}>
@@ -25,7 +20,7 @@ const ChatHeader = ({userData, onBackPress, onBlockPress, onDeletePress, blocked
       <AntDesign name='arrowleft' size={25} color={'black'} style={{paddingRight: 15, paddingLeft: 5, paddingVertical: 10, marginRight: 5}} onPress={onBackPress} />
       <FastImage
         style={styles.image}
-        source={{uri: userData.user_profile_image ? userData.user_profile_image : `${BasUrl}/${user.profileImage}`}}
+        source={{uri: userData.user_profile_image ? userData.user_profile_image : userData.image_uri}}
       />
       <Text style={styles.name}>{userData.user_name}</Text>
 
