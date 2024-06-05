@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { View, TouchableOpacity, ScrollView, Image, StyleSheet } from "react-native";
 import React from "react";
 import images from "../../Constants/images";
 import { COLORS } from "../../Constants/theme";
@@ -6,7 +6,7 @@ import CustomText from "../../Components/Text";
 
 const GoThrough = ({ navigation }) => {
   return (
-    <View style={{ flex: 1 }}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View>
         <Image
           source={images.AuthBackground}
@@ -53,7 +53,7 @@ const GoThrough = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

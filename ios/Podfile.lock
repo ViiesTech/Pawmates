@@ -1521,7 +1521,7 @@ PODS:
   - RNFBApp (19.1.2):
     - Firebase/CoreOnly (= 10.23.1)
     - React-Core
-  - RNFBDatabase (19.2.2):
+  - RNFBDatabase (19.1.2):
     - Firebase/Database (= 10.23.1)
     - React-Core
     - RNFBApp
@@ -1859,7 +1859,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFBApp: 7b51b55651e3b84a4d14869f1e7eee40d69ffd15
-  RNFBDatabase: e5570a7c0fa02dd95a3fb3e9c774680345dcd11c
+  RNFBDatabase: 62dac711518ad68eb7b06a55a1b33e5c90828a51
   RNFBFirestore: 1ea269ad806e0adc5234504fe85cf4b82bd0d8c8
   RNFBStorage: 39122bb169e1ebd6cdc19e4a6a30a37d215c8613
   RNGestureHandler: 6a0bca5c5b2fb62211e9a75d5f4ed877817c4412

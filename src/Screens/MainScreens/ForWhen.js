@@ -29,8 +29,8 @@ const ForWhen = ({navigation, route}) => {
       <Headertext />
 
       <View style={styles.container}>
-        <Text style={styles.header}>
-          I'm looking for service {'\n'} for my:
+        <Text style={[styles.header, {width: '95%', marginTop: '7%'}]}>
+          I'm looking for services {'\n'}for my:
         </Text>
         <InnerButton
           buttonText={'FARM ANIMALS'}

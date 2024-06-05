@@ -1,4 +1,4 @@
-import {Alert, StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {
   widthPercentageToDP as wp,
@@ -15,19 +15,18 @@ const Settings = ({navigation}) => {
 
   return (
     <View style={{flex: 1}}>
-      <AntDesign
-        name="arrowleft"
-        size={25}
-        color={'black'}
+      <TouchableOpacity
         style={{
           margin: 15,
           padding: 8,
           backgroundColor: 'rgba(0,0,0,0.1)',
           alignSelf: 'flex-start',
-          borderRadius: 250,
+          borderRadius: 5,
         }}
-        onPress={() => navigation.goBack()}
-      />
+        onPress={() => navigation.goBack()}>
+        <AntDesign name="arrowleft" size={25} color={'black'} />
+      </TouchableOpacity>
+
       <View
         style={{
           flexDirection: 'row',
@@ -55,12 +54,18 @@ const Settings = ({navigation}) => {
       />
 
       <InnerButton
-        onPress={() => Alert.alert('Log out alert!', 'Are you sure, you want to log out?', [
-          {
-            text: 'Yes',
-            onPress: () => dispatch(logOut())
-          }
-        ])}
+        onPress={() =>
+          Alert.alert('Log out alert!', 'Are you sure, you want to log out?', [
+            {
+              text: 'Yes',
+              onPress: () => dispatch(logOut()),
+            },
+            {
+              text: 'No',
+              // onPress: () => dispatch(logOut()),
+            },
+          ])
+        }
         buttonText={'Log out'}
         style={{
           width: wp('90%'),

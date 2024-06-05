@@ -10,7 +10,8 @@ import {
   Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
-  Keyboard
+  Keyboard,
+  Platform
 } from 'react-native';
 import React, {useState, useEffect, useCallback} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -55,6 +56,7 @@ const ChatScreen = ({navigation, route}) => {
   const {
     userData,
   } = route.params;
+  console.log(")))))))))))))))))----->>>    ", otherUserId, user.id, userData )
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -541,7 +543,7 @@ const ChatScreen = ({navigation, route}) => {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding" enabled >
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? "padding" : null} enabled >
       <View style={styles.chatHeaderContainer}>
         <ChatHeader
           blocked={blockedBy?.includes(user.id) ? true : false}

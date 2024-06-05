@@ -63,8 +63,6 @@ const Chats = ({navigation}) => {
     minTime: 1000,
   });
 
-  // console.log("=-=-=-=------>>    ", user.id)
-
   const getAllChats = () => {
     setChatLoading(true);
 
@@ -73,7 +71,8 @@ const Chats = ({navigation}) => {
       .doc(user.id)
       .onSnapshot(snapshot => {
         const chatsData = [];
-        snapshot.data()?.allChats.forEach(eachChat => {
+        const allChatsArr = snapshot.data()?.allChats ? snapshot.data()?.allChats : []
+        allChatsArr.forEach(eachChat => {
           const chatId = eachChat.ids.filter(id => {
             return id !== `${user.id}`;
           });

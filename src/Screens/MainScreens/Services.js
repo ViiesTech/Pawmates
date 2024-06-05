@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import images from '../../Constants/images';
@@ -37,7 +37,11 @@ const Service = ({navigation, route}) => {
     });
   };
 
+  console.log(Platform.OS)
+  
   return (
+    <KeyboardAvoidingView style={{flex: 1, backgroundColor: 'white', justifyContent: 'space-between'}} behavior={Platform.OS === 'android' ? null : "padding"} enabled >
+
     <FastImage source={images.BackGround} style={{flex: 1}}>
       <ScrollView contentContainerStyle={{flexGrow: 1}}>
 
@@ -88,14 +92,7 @@ const Service = ({navigation, route}) => {
               age.length > 0 &&
               breed.length > 0
             ) {
-              navigation.navigate('WhichAnimal', {
-                categName,
-                animalName,
-                nickName,
-                gender,
-                age,
-                breed,
-              });
+              navigation.navigate('Boarding', {categName, animalName, nickName, gender, age, breed})
             } else {
               showToast('error', 'You must need to fill all fields');
             }
@@ -107,6 +104,7 @@ const Service = ({navigation, route}) => {
 
       </ScrollView>
     </FastImage>
+    </KeyboardAvoidingView>
   );
 };
 

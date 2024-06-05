@@ -34,10 +34,7 @@ const AddImages = ({navigation, route}) => {
     gender,
     age,
     breed,
-    service,
     address,
-    startDate,
-    endDate,
     petSize,
     about
   } = route.params;
@@ -99,11 +96,11 @@ const AddImages = ({navigation, route}) => {
         uri: pickedImages[2].path
       }) : null
     data.append('pet_type', animalName);
-    data.append('pet_address', "address");
-    data.append('pet_drop_off', startDate);
-    data.append('pet_pick_up', endDate);
+    data.append('pet_address', `${address}`);
+    // data.append('pet_drop_off', startDate);
+    // data.append('pet_pick_up', endDate);
     data.append('pet_size', petSize);
-    data.append('pet_purpose_type', service);
+    // data.append('pet_purpose_type', service);
     data.append('pet_descp', about);
 
     let config = {

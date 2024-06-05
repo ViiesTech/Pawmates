@@ -36,11 +36,11 @@ const Chats = ({navigation}) => {
   const [upcomingUsersExists, setUpcomingUsersExists] = useState(false);
   const [bookedUsersExists, setBookedUsersExists] = useState(false);
 
-  useEffect(() => {
-    return navigation.addListener('focus', () => {
-      setShowSearchInput(false);
-    });
-  }, [navigation]);
+  // useEffect(() => {
+  //   return navigation.addListener('focus', () => {
+  //     // setShowSearchInput(false);
+  //   });
+  // }, [navigation]);
 
   const formatDateinHours = dateString => {
     const date = new Date(dateString);
@@ -75,7 +75,8 @@ const Chats = ({navigation}) => {
       .doc(user.id)
       .onSnapshot(snapshot => {
         const chatsData = [];
-        snapshot.data()?.allChats.forEach(eachChat => {
+        const allChatsArr = snapshot.data()?.allChats ? snapshot.data()?.allChats : []
+        allChatsArr.forEach(eachChat => {
           const chatId = eachChat.ids.filter(id => {
             return id !== `${user.id}`;
           });
