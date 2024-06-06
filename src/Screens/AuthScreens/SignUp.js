@@ -19,8 +19,6 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6'
 import ImagePicker from 'react-native-image-crop-picker';
-import firestore from '@react-native-firebase/firestore';
-import storage from '@react-native-firebase/storage';
 
 
 const SignUp = ({ navigation }) => {
@@ -34,10 +32,7 @@ const SignUp = ({ navigation }) => {
   };
 
   const uploadFile = async (path) => {
-    const randomRef = Math.ceil(Math.random() * 1000000);
-    const fileRef = storage().ref(`${randomRef}`);
-    await fileRef.putFile(path);
-    return await fileRef.getDownloadURL();
+ 
   };
 
 
@@ -72,27 +67,9 @@ const SignUp = ({ navigation }) => {
         .then(async(response) => {
 
           if(response.data.success){
+            setIsLoader(false);
+            showToast('success', 'Account created successfully 😍')
 
-            const imageUploadPath = await uploadFile(pickedImage.path);
-            firestore()
-            .collection('users')
-            .doc(`${response.data._id}`)
-            .set({
-              name: values.name,
-              profileImage: imageUploadPath,
-              email: values.email,
-              id: response.data._id,
-              user_type: option
-            })
-            .then(() => {
-              setIsLoader(false);
-              showToast('success', 'Account created successfully 😍')
-              navigation.navigate('Login')
-            })
-            .catch((err) => {
-              setIsLoader(false)
-              console.log("Error with firebase firestore ---->   ", err)
-            });
             
           }else {
             setIsLoader(false)

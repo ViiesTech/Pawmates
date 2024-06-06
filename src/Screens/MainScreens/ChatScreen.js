@@ -22,8 +22,6 @@ import {
 import {COLORS} from '../../Constants/theme';
 import AnimatedLottieView from 'lottie-react-native';
 import {useSelector} from 'react-redux';
-import firestore from '@react-native-firebase/firestore';
-import database from '@react-native-firebase/database';
 import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import InputField from '../../Components/InputField';
@@ -31,8 +29,8 @@ import ChatHeader from '../../Components/ChatHeader';
 import Modal from 'react-native-modal';
 import {createThumbnail} from 'react-native-create-thumbnail';
 import ImagePicker from 'react-native-image-crop-picker';
-import storage from '@react-native-firebase/storage';
 import FastImage from 'react-native-fast-image';
+import socketServices from '../../socket/socketService';
 
 const ChatScreen = ({navigation, route}) => {
   const [messageText, setMessageText] = useState('');
@@ -79,66 +77,34 @@ const ChatScreen = ({navigation, route}) => {
   }, []);
 
   useEffect(() => {
-    if (!messageText) {
-      database().ref(`/chats/${currentChatId}`).update({
-        typing: false
-      })
-    } else if (messageText.length === 1) {
-      database().ref(`/chats/${currentChatId}`).update({
-        typing: user.id
-      })
-    }
-  }, [messageText]);
-
-  useEffect(() => {
-    database().ref(`/chats/${user.id}_${otherUserId}`).on('value', (snapshot) => {
-      if(snapshot.exists()){
-        const data = snapshot.val()
-        setCurrentChatId(`${user.id}_${otherUserId}`);
-        setDeletedFor(data.deletedFor);
-        setChatExists(true);
-        setMessages(data.messages);
-        setReadByIds(data.readBy);
-        setTyping(data.typing);
-        setBlockedBy(data?.blockedBy ? data?.blockedBy : [])
-      }else {
-        database().ref(`/chats/${otherUserId}_${user.id}`).on('value', (snapshot) => {
-          if(snapshot.exists()){
-            const data = snapshot.val()
-
-            setCurrentChatId(`${otherUserId}_${user.id}`);
-            setDeletedFor(data.deletedFor);
-            setChatExists(true);
-            setMessages(data.messages);
-            setReadByIds(data.readBy);
-            setTyping(data.typing);
-            setBlockedBy(data?.blockedBy ? data?.blockedBy : [])
-          }
-        })
-      }
+    socketServices.on('receiveMessage', (data)=>{
+      console.log("data from socket :", data)
     })
+  }, [messages]);
 
-  }, []);
-
-  // This useEffect checks whether the message is being seen or not
   useEffect(() => {
-    messageSeen();
-  }, [chatExists, messages]);
+    const sub = navigation.addListener('focus',()=>{
 
-  // This function checks whether the readBy array includes data.id and if not, it adds it in that array
-  const messageSeen = () => {
-    const chatRef = database().ref(`/chats/${currentChatId}`);
+      openChat()
+    })
+    return sub
 
-    if (chatExists) {
-      chatRef.on('value', snapshot => {
-        const readByIdsArray = snapshot.val().readBy;
+  }, [navigation]);
 
-        if (!readByIdsArray.includes(user?.id)) {
-          const readByRef = database().ref(`/chats/${currentChatId}/readBy`);
-          readByRef.set([...readByIdsArray, user?.id]);
-        }
-      });
-    }
+  const openChat = () => {
+    // console.log("userData,:", user)
+    socketServices.emit('openChat', {username : user.name, recieversName: userData.user_name})
+    
+  }
+
+  const onSend = async () => {
+    socketServices.emit('sendMessage', {sender: user.name, receiver : userData.user_name , message : messageText})
+
+    const data = [
+      {sender: user.name, receiver : userData.user_name , message : messageText }
+  ]
+
+  setMessages(data)
   };
 
   const renderMessages = ({item, index}) => {
@@ -198,282 +164,11 @@ const ChatScreen = ({navigation, route}) => {
       }
   };
 
-  const startChat = ({videoUrl = null, imageUrl = null, thumbnailUrl = null} = {}) => {
-    database().ref(`/chats/${user.id}_${otherUserId}`).set({
-      chatId: `${user.id}_${otherUserId}`,
-      ids: [`${user.id}`, `${otherUserId}`],
-      lastMessageTime: new Date().getTime(),
-      readBy: [user.id],
-      lastMessage: {
-        text: messageText,
-        senderId: user.id,
-      },
-      deletedFor: {
-        [user.id]: new Date().getTime(),
-        [otherUserId]: new Date().getTime()
-      },
-      blockedBy: [],
-      messages: [
-        {
-          messageText: messageText,
-          senderId: user.id,
-          messageTime: new Date().getTime(),
-          imageUrl: imageUrl,
-          videoUrl: videoUrl,
-          thumbnailUrl: thumbnailUrl
-        },
-      ],
-    })
-    .then(() => {
-      firestore()
-      .collection('users')
-      .doc(user.id)
-      .get()
-      .then(snapshot => {
-        const allChats = snapshot.data()?.allChats;
-        if(allChats){
-          firestore()
-            .collection('users')
-            .doc(user.id)
-            .update({
-              allChats: [
-                ...allChats ,
-                {
-                  chatId: `${user.id}_${otherUserId}`,
-                  ids: [user.id, otherUserId],
-                  createdAt: new Date().getTime(),
-                  lastMessage: {
-                    text: messageText,
-                    senderId: user.id,
-                  },
-                },
-              ],
-            }).then(() => console.log("DONE"))
-            .catch(err => console.log("Some error with updating --->   ", err))
-        }else {
-          firestore()
-          .collection('users')
-          .doc(user.id)
-          .update({
-            allChats: [
-              {
-                chatId: `${user.id}_${otherUserId}`,
-                ids: [user.id, otherUserId],
-                createdAt: new Date().getTime(),
-                lastMessage: {
-                  text: messageText,
-                  senderId: user.id,
-                },
-              },
-            ],
-          }).then(() => console.log("DONE"))
-          .catch(err => console.log("Some error with updating --->   ", err))
-        }
-      })
-      .catch(err => console.log("HRE IS THE ERRORORORO ---->   ", err))
-
-    firestore()
-      .collection('users')
-      .doc(otherUserId)
-      .get()
-      .then(snapshot => {
-        const allChats = snapshot.data()?.allChats;
-        if(allChats){
-          firestore()
-            .collection('users')
-            .doc(otherUserId)
-            .update({
-              allChats: [
-                ...allChats ,
-                {
-                  chatId: `${user.id}_${otherUserId}`,
-                  ids: [user.id, otherUserId],
-                  createdAt: new Date().getTime(),
-                  lastMessage: {
-                    text: messageText,
-                    senderId: user.id,
-                  },
-                },
-              ],
-            }).then(() => console.log("DONE"))
-            .catch(err => console.log("Some error with updating --->   ", err))
-        }else {
-          firestore()
-          .collection('users')
-          .doc(otherUserId)
-          .update({
-            allChats: [
-              {
-                chatId: `${user.id}_${otherUserId}`,
-                ids: [user.id, otherUserId],
-                createdAt: new Date().getTime(),
-                lastMessage: {
-                  text: messageText,
-                  senderId: user.id,
-                },
-              },
-            ],
-          }).then(() => console.log("DONE"))
-          .catch(err => console.log("Some error with updating --->   ", err))
-        }
-      })
-      .catch(err => console.log("HRE IS THE ERRORORORO ---->   ", err))
-      
-      
-      setMessageSendingLoading(false)
-      setPickedImage('');
-      setPickedVideo('');
-      setMessageText('');
-      setThumbnail('');
-    })
-    .catch(() => {
-      setMessageSendingLoading(false)
-    })
-    
-  };
 
 
-  const sendMessage = async ({ videoUrl = null, imageUrl = null, thumbnailUrl = null } = {}) => {
-    try {
-      const updatedChat = {
-        lastMessageTime: new Date().getTime(),
-        readBy: [user.id],
-        lastMessage: {
-          text: messageText,
-          senderId: user.id,
-        },
-        messages: [
-          {
-            messageText: messageText,
-            senderId: user.id,
-            messageTime: new Date().getTime(),
-            imageUrl,
-            videoUrl,
-            thumbnailUrl
-          },
-          ...messages,
-        ],
-      };
-  
-      await database().ref(`/chats/${currentChatId}`).update(updatedChat)
-
-      setMessageSendingLoading(false);
-      setPickedImage('');
-      setPickedVideo('');
-      setMessageText('');
-      setThumbnail('');
-
-      await firestore()
-      .collection('users')
-      .doc(user.id)
-      .get()
-      .then((snapshot) => {
-        const allChats = snapshot.data()?.allChats;
-        const currentChat = allChats.filter(eachChat => eachChat.ids.includes(otherUserId))
-        const otherChats = allChats.filter(eachChat => !eachChat.ids.includes(otherUserId))
-
-
-        currentChat[0].createdAt = new Date().getTime()
-        currentChat[0].lastMessage = {
-          senderId: user.id,
-          text: messageText
-        }
-        firestore()
-        .collection('users')
-        .doc(user.id)
-        .update({
-          allChats: [
-            ...otherChats,
-            ...currentChat
-          ]
-        })
-      });
-
-      await firestore()
-      .collection('users')
-      .doc(otherUserId)
-      .get()
-      .then((snapshot) => {
-        const allChats = snapshot.data()?.allChats;
-        const currentChat = allChats.filter(eachChat => eachChat.ids.includes(user.id))
-        const otherChats = allChats.filter(eachChat => !eachChat.ids.includes(user.id))
-
-        currentChat[0].createdAt = new Date().getTime()
-        currentChat[0].lastMessage = {
-          senderId: user.id,
-          text: messageText
-        }
-        firestore()
-        .collection('users')
-        .doc(otherUserId)
-        .update({
-          allChats: [
-            ...otherChats,
-            ...currentChat
-          ]
-        })
-      });
-      
-    } catch (error) {
-      setMessageSendingLoading(false);
-      console.error('Something went wrong while sending message: ----> ', error);
-    }
-  };
-
-  const onSend = async () => {
-    if (!chatExists) {
-      // console.log("-------->>>  CHAT EXIST IS FALSE  ", chatExists)
-      try {
-        if (pickedImage.path) {
-          setMessageSendingLoading(true);
-          const imageUrl = await uploadFile(pickedImage.path);
-          startChat({ imageUrl });
-        } else if (pickedVideo.path) {
-          setMessageSendingLoading(true);
-          const videoUrl = await uploadFile(pickedVideo.path);
-          const thumbnailUrl = await uploadFile(thumbnail.path);
-          startChat({ videoUrl, thumbnailUrl });
-        } else if (messageText) {
-          setMessageSendingLoading(true);
-          startChat();
-        } else {
-          Alert.alert("You can not send an empty message");
-        }
-      } catch (error) {
-        console.error(error);
-        setMessageSendingLoading(false);
-        Alert.alert("Failed to send message. Please try again.");
-      }
-    } else {
-      try {
-        if (pickedImage.path) {
-          setMessageSendingLoading(true);
-          const imageUrl = await uploadFile(pickedImage.path);
-          sendMessage({ imageUrl });
-        } else if (pickedVideo.path) {
-          setMessageSendingLoading(true);
-          const videoUrl = await uploadFile(pickedVideo.path);
-          const thumbnailUrl = await uploadFile(thumbnail.path);
-          sendMessage({ videoUrl, thumbnailUrl });
-        } else if (messageText) {
-          setMessageSendingLoading(true);
-          sendMessage();
-        } else {
-          Alert.alert("You can not send an empty message");
-        }
-      } catch (error) {
-        console.error(error);
-        setMessageSendingLoading(false);
-        Alert.alert("Failed to send message. Please try again.");
-      }
-    }
-  };
   
   const uploadFile = async (path) => {
-    const randomRef = Math.ceil(Math.random() * 1000000);
-    const fileRef = storage().ref(`${randomRef}`);
-    await fileRef.putFile(path);
-    return fileRef.getDownloadURL();
+
   };
 
   const pickVideo = () => {
@@ -508,38 +203,14 @@ const ChatScreen = ({navigation, route}) => {
 
   
   const onBlockPress = () => {
-    database().ref(`/chats/${currentChatId}`).update({
-      blockedBy: [...blockedBy, user.id]
-    })
-    .then(() => {
-      console.log('User Blocked Successfully')
-    })
-    .catch(err => console.log(err))
+
   }
   const onUnblockPress = () => {
-    database().ref(`/chats/${currentChatId}`).update({
-      blockedBy: blockedBy.filter(each => each !== user.id)
-    })
-    .then(() => {
-      console.log('User Blocked Successfully')
-    })
-    .catch(err => console.log(err))
+
   }
   
   const onDeletePress = () => {
-    database().ref(`/chats/${currentChatId}`).update({
-      deletedFor: {
-        [otherUserId]: deletedFor[otherUserId],
-        [user.id]:  new Date().getTime()
-      },
-      lastMessage: {
-        text: ''
-      }
-    })
-    .then(() => {
-      console.log('chat deleted successfully')
-    })
-    .catch(err => console.log(err))
+
   }
 
   return (

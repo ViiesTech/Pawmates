@@ -19,8 +19,6 @@ import ChatCard from '../../Components/ChatCard';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Header from '../../Components/Header';
 import {useSelector} from 'react-redux';
-import firestore from '@react-native-firebase/firestore';
-import database from '@react-native-firebase/database';
 import axios from 'axios';
 import Button from '../../Components/Button';
 import Bottleneck from 'bottleneck';
@@ -68,54 +66,7 @@ const Chats = ({navigation}) => {
   });
 
   const getAllChats = () => {
-    setChatLoading(true);
-
-    const unsubscribe = firestore()
-      .collection('users')
-      .doc(user.id)
-      .onSnapshot(snapshot => {
-        const chatsData = [];
-        const allChatsArr = snapshot.data()?.allChats ? snapshot.data()?.allChats : []
-        allChatsArr.forEach(eachChat => {
-          const chatId = eachChat.ids.filter(id => {
-            return id !== `${user.id}`;
-          });
-
-          chatsData.push({
-            ...eachChat,
-            chatId,
-          });
-        });
-        
-        chatsData.sort((a, b) => b.createdAt - a.createdAt);
-        Promise.all(
-          chatsData.map(async chat => {
-            const userSnapshot = await firestore()
-              .collection('users')
-              .doc(`${chat.chatId}`)
-              .get();
-
-            return {
-              ...userSnapshot.data(),
-              lastMessage: chat.lastMessage.text,
-              lastMessageTime: chat.createdAt,
-              requestAccepted: chat.requestAccepted
-            };
-          }),
-        )
-          .then(userData => {
-            setChats(userData);
-            setChatLoading(false);
-          })
-          .catch(error => {
-            console.error(error);
-            setChatLoading(false);
-          });
-      });
-
-    return () => {
-      unsubscribe();
-    };
+   
   };
 
 

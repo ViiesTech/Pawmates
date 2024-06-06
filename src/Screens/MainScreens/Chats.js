@@ -8,8 +8,8 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {COLORS} from '../../Constants/theme';
+import React, { useState, useEffect } from 'react';
+import { COLORS } from '../../Constants/theme';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -17,16 +17,16 @@ import {
 import ChatCard from '../../Components/ChatCard';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Header from '../../Components/Header';
-import {useSelector} from 'react-redux';
-import firestore from '@react-native-firebase/firestore';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import Button from '../../Components/Button';
 import Bottleneck from 'bottleneck';
-import database from '@react-native-firebase/database';
+import BasUrl from '../../BasUrl';
 
-const Chats = ({navigation}) => {
+
+const Chats = ({ navigation }) => {
   const [showSearchInput, setShowSearchInput] = useState(false);
-  const {user, token} = useSelector(state => state.authData);
+  const { user, token } = useSelector(state => state.authData);
   const [chats, setChats] = useState([]);
   const [chatLoading, setChatLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
@@ -66,52 +66,30 @@ const Chats = ({navigation}) => {
   const getAllChats = () => {
     setChatLoading(true);
 
-    const unsubscribe = firestore()
-      .collection('users')
-      .doc(user.id)
-      .onSnapshot(snapshot => {
-        const chatsData = [];
-        const allChatsArr = snapshot.data()?.allChats ? snapshot.data()?.allChats : []
-        allChatsArr.forEach(eachChat => {
-          const chatId = eachChat.ids.filter(id => {
-            return id !== `${user.id}`;
-          });
 
-          chatsData.push({
-            ...eachChat,
-            chatId,
-          });
-        });
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `${BasUrl}/chat/getAllchat`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    };
+
+    axios.request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        setChats(response.data.data)
+        setChatLoading(false);
         
-        chatsData.sort((a, b) => b.createdAt - a.createdAt);
-        Promise.all(
-          chatsData.map(async chat => {
-            const userSnapshot = await firestore()
-              .collection('users')
-              .doc(`${chat.chatId}`)
-              .get();
-
-            return {
-              ...userSnapshot.data(),
-              lastMessage: chat.lastMessage.text,
-              lastMessageTime: chat.createdAt,
-              requestAccepted: chat.requestAccepted
-            };
-          }),
-        )
-          .then(userData => {
-            setChats(userData);
-            setChatLoading(false);
-          })
-          .catch(error => {
-            console.error(error);
-            setChatLoading(false);
-          });
+      })
+      .catch((error) => {
+        setChatLoading(false);
+        console.log(error);
       });
 
-    return () => {
-      unsubscribe();
-    };
+
+
   };
 
   const handleSearchFilter = changedText => {
@@ -123,10 +101,11 @@ const Chats = ({navigation}) => {
     setFilteredChats(theFilteredChats);
   };
 
-  const renderChatCard = ({item}) => {
+  const renderChatCard = ({ item }) => {
+    console.log("item: ", item)
     if (chats) {
       return (
-        <View style={{marginVertical: 10}}>
+        <View style={{ marginVertical: 10 }}>
           <ChatCard
             onPress={() =>
               navigation.navigate('ChatScreen', {
@@ -138,10 +117,10 @@ const Chats = ({navigation}) => {
                 },
               })
             }
-            username={item.name}
-            userAvatar={item.profileImage}
-            lastMessage={item.lastMessage}
-            lastMessageTime={formatDateinHours(item.lastMessageTime)}
+            username={item.receiver == user.name ? item.receiver : item.sender}
+            userAvatar={item.receiver == user.name ?  item.receiverImg : item.senderImg}
+            lastMessage={item.message}
+            lastMessageTime={formatDateinHours(item.timestamp)}
           />
         </View>
       );
@@ -164,13 +143,13 @@ const Chats = ({navigation}) => {
             <TextInput
               placeholder="Search chat"
               placeholderTextColor={'grey'}
-              style={{color: 'black'}}
+              style={{ color: 'black' }}
               autoFocus={true}
               cursorColor="black"
               value={searchText}
               onChangeText={handleSearchFilter}
             />
-            <View style={{width: 30}} />
+            <View style={{ width: 30 }} />
             <AntDesign
               name="search1"
               size={30}
@@ -201,7 +180,7 @@ const Chats = ({navigation}) => {
             <ActivityIndicator
               color={'black'}
               size={55}
-              style={{marginVertical: 80}}
+              style={{ marginVertical: 80 }}
             />
           </>
         ) : (

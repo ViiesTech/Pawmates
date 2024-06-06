@@ -20,7 +20,7 @@ import {useSelector} from 'react-redux';
 import axios, {all} from 'axios';
 import BasUrl from '../../BasUrl';
 import Toast from 'react-native-toast-message';
-import firestore from '@react-native-firebase/firestore';
+
 
 const NotificationScreen = ({navigation}) => {
   const {token, user} = useSelector(state => state.authData);
@@ -87,53 +87,7 @@ const NotificationScreen = ({navigation}) => {
   };
 
   const makeRequestAcceptedTrue = (myId, otherUserId) => {
-    firestore()
-      .collection('users')
-      .doc(myId)
-      .get()
-      .then(snapshot => {
-        const allChats = snapshot.data()?.allChats;
-        const currentChat = allChats.filter(eachChat =>
-          eachChat.ids.includes(otherUserId),
-        );
-        const otherChats = allChats.filter(
-          eachChat => !eachChat.ids.includes(otherUserId),
-        );
-
-        if (currentChat.length > 0) {
-          currentChat[0].requestAccepted = true;
-          firestore()
-            .collection('users')
-            .doc(user.id)
-            .update({
-              allChats: [...otherChats, ...currentChat],
-            });
-        }
-      });
-
-    firestore()
-      .collection('users')
-      .doc(otherUserId)
-      .get()
-      .then(snapshot => {
-        const allChats = snapshot.data()?.allChats;
-        const currentChat = allChats.filter(eachChat =>
-          eachChat.ids.includes(myId),
-        );
-        const otherChats = allChats.filter(
-          eachChat => !eachChat.ids.includes(myId),
-        );
-
-        if (currentChat.length > 0) {
-          currentChat[0].requestAccepted = true;
-          firestore()
-            .collection('users')
-            .doc(user.id)
-            .update({
-              allChats: [...otherChats, ...currentChat],
-            });
-        }
-      });
+  
   };
 
   const rejectRequest = petRequestId => {

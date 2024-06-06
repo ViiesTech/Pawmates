@@ -8,10 +8,16 @@ import {store} from './src/Redux/store';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import Toast from 'react-native-toast-message';
+import socketServices from './src/socket/socketService';
 
 let persistor = persistStore(store);
 const App = () => {
   const [loading, setLoading] = useState(true);
+
+  useEffect(()=>{
+    socketServices.initiaize()
+  },[])
+
 
   useEffect(() => {
     setTimeout(() => {
