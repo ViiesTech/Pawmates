@@ -8,7 +8,6 @@ import {
 import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import {RadioButton} from 'react-native-paper';
-
 import Toast from 'react-native-toast-message';
 import {logInValidationSchema} from '../../Utills/Validations';
 import CustomText from '../../Components/Text';
@@ -27,6 +26,8 @@ const LogIn = ({navigation}) => {
   const [isLoader, setIsLoader] = useState(false);
   const dispatch = useDispatch();
   const loading = useSelector(state => state.authData.isLoading);
+
+
 
   const LogInUser = async (values, {setSubmitting, setValues}) => {
     // const myHeaders = new Headers();

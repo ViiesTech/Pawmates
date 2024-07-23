@@ -1,5 +1,7 @@
 #import "AppDelegate.h"
-
+#import <AuthenticationServices/AuthenticationServices.h>
+#import <SafariServices/SafariServices.h>
+#import <FBSDKCoreKit/FBSDKCoreKit-Swift.h>
 #import <React/RCTBundleURLProvider.h>
 
 @implementation AppDelegate
@@ -11,7 +13,8 @@
   // They will be passed down to the ViewController used by React Native.
   
   self.initialProps = @{};
-
+   [[FBSDKApplicationDelegate sharedInstance] application:application
+                       didFinishLaunchingWithOptions:launchOptions];
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 

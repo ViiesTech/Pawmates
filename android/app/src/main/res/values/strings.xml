@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Pawmates</string>
+    <string name="facebook_app_id">1168868124383397</string>
+    <string name="fb_login_protocol_scheme">fb1168868124383397</string>
+    <string name="facebook_client_token">04602dfacc6529e52e3b3abe6156ccc0</string>
+
+
 </resources>
