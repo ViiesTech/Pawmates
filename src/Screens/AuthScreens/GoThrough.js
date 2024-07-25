@@ -16,6 +16,8 @@ import {
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
 import ShowToast from '../../GlobalFunctions/ShowToast';
 import auth from '@react-native-firebase/auth';
+import { appleAuth } from '@invertase/react-native-apple-authentication';
+
 const GoThrough = ({ navigation }) => {
   useEffect(() => {
     GoogleSignin.configure({
@@ -95,6 +97,27 @@ const GoThrough = ({ navigation }) => {
       throw error;  // Re-throw the error if needed
     }
   };
+
+  const handleAppleAuth = async () => {
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      // As per the FAQ of react-native-apple-authentication, the name should come first in the following array.
+      // See: https://github.com/invertase/react-native-apple-authentication#faqs
+      requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+    });
+  
+    // Ensure Apple returned a user identityToken
+    if (!appleAuthRequestResponse.identityToken) {
+      throw new Error('Apple Sign-In failed - no identify token returned');
+    }
+  
+    // Create a Firebase credential from the response
+    const { identityToken, nonce } = appleAuthRequestResponse;
+    const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
+  
+    // Sign the user in with the credential
+    return auth().signInWithCredential(appleCredential);
+  }
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View>
@@ -105,6 +128,7 @@ const GoThrough = ({ navigation }) => {
         />
         <View style={{ marginHorizontal: 35 }}>
           <TouchableOpacity
+          onPress={()=>handleAppleAuth()}
             style={[
               styles.container,
               { marginTop: 25, backgroundColor: 'black' },
