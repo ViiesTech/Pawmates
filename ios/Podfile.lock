@@ -401,7 +401,7 @@ PODS:
   - React-jsinspector (0.72.4)
   - React-logger (0.72.4):
     - glog
-  - react-native-create-thumbnail (1.6.4):
+  - react-native-create-thumbnail (2.0.0-rc.2):
     - React-Core
   - react-native-date-picker (4.4.2):
     - React-Core
@@ -569,10 +569,9 @@ PODS:
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNScreens (3.32.0):
+  - RNScreens (3.29.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-    - React-RCTImage
   - RNVectorIcons (10.1.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -835,7 +834,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: c7f826e40fa9cab5d37cab6130b1af237332b594
   React-jsinspector: aaed4cf551c4a1c98092436518c2d267b13a673f
   React-logger: da1ebe05ae06eb6db4b162202faeafac4b435e77
-  react-native-create-thumbnail: e022bcdcba8a0b4529a50d3fa1a832ec921be39d
+  react-native-create-thumbnail: 6f45caa41b69098376c1681bf757c6113871b7b8
   react-native-date-picker: 312c387d2ff873c66c5e4cf78ff6827fa91644e2
   react-native-fbsdk-next: 84746ea062dc3b1a422154d7674ba4c5836b6d82
   react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
@@ -867,7 +866,7 @@ SPEC CHECKSUMS:
   RNGoogleSignin: 08dc4ba7eac2096c7fecfe109f0950fa4683c803
   RNImageCropPicker: e7ab6fb43d2fc3e84651e786ef4a080d63b0ed3d
   RNReanimated: 6f36e44a9e55ccf5c252a51d08f52ed49c68ad48
-  RNScreens: 835807a1f3c74c8ea0d0b9e089bf14333141f17f
+  RNScreens: 1c2444658fbb696a094272d946708167b1f63409
   RNVectorIcons: 084c5c365eca594f94fda0192d8a380b2b40f9b5
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d

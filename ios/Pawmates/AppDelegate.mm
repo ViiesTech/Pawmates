@@ -4,6 +4,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit-Swift.h>
 #import <React/RCTBundleURLProvider.h>
 
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -15,6 +16,7 @@
   self.initialProps = @{};
    [[FBSDKApplicationDelegate sharedInstance] application:application
                        didFinishLaunchingWithOptions:launchOptions];
+                        
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 

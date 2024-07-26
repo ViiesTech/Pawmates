@@ -4,6 +4,7 @@ import {
   ScrollView,
   Image,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import React, { useEffect } from 'react';
 import images from '../../Constants/images';
@@ -16,13 +17,14 @@ import {
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
 import ShowToast from '../../GlobalFunctions/ShowToast';
 import auth from '@react-native-firebase/auth';
-import { appleAuth } from '@invertase/react-native-apple-authentication';
+// import { appleAuth } from '@invertase/react-native-apple-authentication';
 
 const GoThrough = ({ navigation }) => {
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId:
-        '386029052031-1ni6hqf4ipblq0b5djghrh9rlmqr5i4b.apps.googleusercontent.com',
+      webClientId: Platform.OS === 'ios' 
+      ? '1062821622342-s61pfalves38n99havri66pd7eao3kon.apps.googleusercontent.com' // iOS Web Client ID
+      : '386029052031-1ni6hqf4ipblq0b5djghrh9rlmqr5i4b.apps.googleusercontent.com', // Android Web Client ID
       offlineAccess: true,
       forceCodeForRefreshToken: true,
       profileImageSize: 120,
@@ -37,12 +39,13 @@ const GoThrough = ({ navigation }) => {
       ShowToast('success', 'Login Successful');
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log('cancelled');
+        console.log('cancelled',error.message);
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log('in progress');
+        console.log('in progress',error.message);
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log('play services not available');
+        console.log('play services not available',error.message);
       } else {
+        console.log(error.message)
         ShowToast('error', error.message);
       }
     }
@@ -50,74 +53,88 @@ const GoThrough = ({ navigation }) => {
 
   const handleFacebookAuth = async () => {
     try {
-      // Log out if there's an active session
-      LoginManager.logOut();
-  
-      // Attempt login with permissions
-      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-      
-      if (result.isCancelled) {
-        throw new Error('User cancelled the login process');
-      }
-  
-      // Get the Access Token
-      const data = await AccessToken.getCurrentAccessToken();
-      
-      if (!data) {
-        throw new Error('Something went wrong obtaining access token');
-      }
-  
-      const token = data.accessToken;
-      
-      // Fetch user information from Facebook
-      const response = await fetch(`https://graph.facebook.com/me?fields=id,first_name,last_name,email&access_token=${token}`);
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch user information from Facebook');
-      }
-      
-      const userInfo = await response.json();
-      const { id, first_name, last_name, email } = userInfo;
-  
-      console.log('User Info:', { id, first_name, last_name, email });
-  
-      // Create a Firebase credential with the Access Token
-      const facebookCredential = auth.FacebookAuthProvider.credential(token);
-      
-      console.log('Facebook Credential:', facebookCredential);
-  
-      // Sign-in the user with the credential
-      const firebaseUserCredential = await auth().signInWithCredential(facebookCredential);
-  
-      console.log('Firebase User Credential:', firebaseUserCredential);
-      
-      return firebaseUserCredential;
-    } catch (error) {
-      console.error('Facebook Auth Error:', error);
-      throw error;  // Re-throw the error if needed
-    }
-  };
+        // Log out if there's an active session
+        LoginManager.logOut();
 
-  const handleAppleAuth = async () => {
-    const appleAuthRequestResponse = await appleAuth.performRequest({
-      requestedOperation: appleAuth.Operation.LOGIN,
-      // As per the FAQ of react-native-apple-authentication, the name should come first in the following array.
-      // See: https://github.com/invertase/react-native-apple-authentication#faqs
-      requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
-    });
-  
-    // Ensure Apple returned a user identityToken
-    if (!appleAuthRequestResponse.identityToken) {
-      throw new Error('Apple Sign-In failed - no identify token returned');
+        // Attempt login with permissions
+        const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+        if (result.isCancelled) {
+            throw new Error('User cancelled the login process');
+        }
+
+        // Get the Access Token
+        const data = await AccessToken.getCurrentAccessToken();
+        console.log('Access Token Data:', data);
+        
+        if (!data) {
+            throw new Error('Failed to obtain access token');
+        }
+        
+        const token = data.accessToken;
+        console.log('Access Token:', token);
+        
+        // Fetch user information from Facebook
+        const response = await fetch(`https://graph.facebook.com/me?fields=id,first_name,last_name,email&access_token=${token}`);
+
+        if (!response.ok) {
+            const errorText = await response.text(); // Capture error message
+            throw new Error(`Failed to fetch user information from Facebook: ${errorText}`);
+        }
+
+        const userInfo = await response.json();
+        const { id, first_name, last_name, email } = userInfo;
+
+        console.log('User Info:', { id, first_name, last_name, email });
+
+        // Create a Firebase credential with the Access Token
+        const facebookCredential = auth.FacebookAuthProvider.credential(token);
+
+        console.log('Facebook Credential:', facebookCredential);
+
+        // Sign-in the user with the credential
+        const firebaseUserCredential = await auth().signInWithCredential(facebookCredential);
+
+        console.log('Firebase User Credential:', firebaseUserCredential);
+
+        return firebaseUserCredential;
+    } catch (error) {
+        console.error('Facebook Auth Error:', error);
+        throw error;  // Re-throw the error if needed
     }
+};
+
+
+
+  // const handleAppleAuth = async () => {
+  //   try {
+  //     const appleAuthRequestResponse = await appleAuth.performRequest({
+  //       requestedOperation: appleAuth.Operation.LOGIN,
+  //       requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+  //     });
   
-    // Create a Firebase credential from the response
-    const { identityToken, nonce } = appleAuthRequestResponse;
-    const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
+  //     // Ensure Apple returned a user identityToken
+  //     if (!appleAuthRequestResponse.identityToken) {
+  //       throw new Error('Apple Sign-In failed - no identity token returned');
+  //     }
   
-    // Sign the user in with the credential
-    return auth().signInWithCredential(appleCredential);
-  }
+  //     // Create a Firebase credential from the response
+  //     const { identityToken, nonce } = appleAuthRequestResponse;
+  //     const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
+  
+  //     // Sign the user in with the credential
+  //     const firebaseUserCredential = await auth().signInWithCredential(appleCredential);
+  //     console.log('Firebase User Credential:', firebaseUserCredential);
+      
+  //     ShowToast('success', 'Login Successful');
+  //     return firebaseUserCredential;
+  //   } catch (error) {
+  //     console.error('Apple Auth Error:', error);
+  //     ShowToast('error', error.message);
+  //     throw error;  // Re-throw the error if needed
+  //   }
+  // };
+  
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View>
@@ -128,7 +145,7 @@ const GoThrough = ({ navigation }) => {
         />
         <View style={{ marginHorizontal: 35 }}>
           <TouchableOpacity
-          onPress={()=>handleAppleAuth()}
+          // onPress={()=>handleAppleAuth()}
             style={[
               styles.container,
               { marginTop: 25, backgroundColor: 'black' },

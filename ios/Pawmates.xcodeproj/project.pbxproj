@@ -32,6 +32,8 @@
 		FA84B9F32BCEFA8400528376 /* backGroundScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = FA84B9DE2BCEFA8400528376 /* backGroundScreen.png */; };
 		FA84B9F42BCEFA8400528376 /* typing-lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = FA84B9E02BCEFA8400528376 /* typing-lottie.json */; };
 		FA84B9F52BCEFA8400528376 /* intro_gif.gif in Resources */ = {isa = PBXBuildFile; fileRef = FA84B9E22BCEFA8400528376 /* intro_gif.gif */; };
+		FAAB1AB72C53D4A900E32D50 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAAB1AB62C53D4A900E32D50 /* GoogleService-Info.plist */; };
+		FAAB1AB82C53D4A900E32D50 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAAB1AB62C53D4A900E32D50 /* GoogleService-Info.plist */; };
 		FAC2F02A2ACC98F900E4CF53 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAC2F0292ACC98F900E4CF53 /* images.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -81,6 +83,7 @@
 		FA84B9DE2BCEFA8400528376 /* backGroundScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backGroundScreen.png; sourceTree = "<group>"; };
 		FA84B9E02BCEFA8400528376 /* typing-lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "typing-lottie.json"; sourceTree = "<group>"; };
 		FA84B9E22BCEFA8400528376 /* intro_gif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = intro_gif.gif; sourceTree = "<group>"; };
+		FAAB1AB62C53D4A900E32D50 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FAC2F0292ACC98F900E4CF53 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = images.xcassets; path = ../images.xcassets; sourceTree = "<group>"; };
 		FAD805382AC3A5F600D2C61E /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		FAD805392AC3A5F600D2C61E /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
@@ -140,6 +143,7 @@
 		13B07FAE1A68108700A75B9A /* Pawmates */ = {
 			isa = PBXGroup;
 			children = (
+				FAAB1AB62C53D4A900E32D50 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				FAC2F0292ACC98F900E4CF53 /* images.xcassets */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -366,6 +370,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAAB1AB82C53D4A900E32D50 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,6 +397,7 @@
 				FA84B9EF2BCEFA8400528376 /* logo.png in Resources */,
 				FA84B9F12BCEFA8400528376 /* PETWALKING.png in Resources */,
 				FA84B9F22BCEFA8400528376 /* BOARDING.png in Resources */,
+				FAAB1AB72C53D4A900E32D50 /* GoogleService-Info.plist in Resources */,
 				FA84B9E82BCEFA8400528376 /* HOUSESITTING.png in Resources */,
 				FA84B9E32BCEFA8400528376 /* Google_Icon.png in Resources */,
 			);
