@@ -535,6 +535,8 @@ PODS:
     - React-logger (= 0.72.4)
     - React-perflogger (= 0.72.4)
   - RecaptchaInterop (100.0.0)
+  - RNAppleAuthentication (2.3.0):
+    - React-Core
   - RNCAsyncStorage (1.24.0):
     - React-Core
   - RNCMaskedView (0.2.9):
@@ -633,6 +635,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
@@ -765,6 +768,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNAppleAuthentication:
+    :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCMaskedView:
@@ -857,6 +862,7 @@ SPEC CHECKSUMS:
   React-utils: fa354d05d1183d6b593eff9339af69d32f1740b6
   ReactCommon: dadb36b259989432e922c7ac00de8442eaf3971f
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
+  RNAppleAuthentication: e99eaf3c4c01ad8ecb6125dd6f0cfd98871685b5
   RNCAsyncStorage: ec53e44dc3e75b44aa2a9f37618a49c3bc080a7a
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
