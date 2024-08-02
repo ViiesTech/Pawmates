@@ -50,6 +50,9 @@ const authSlice = createSlice({
       state.token = ""
       state.user = []
     },
+    setToken: (state,action) => {
+      state.token = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(UserLogin.pending, (state) => {
@@ -67,5 +70,5 @@ const authSlice = createSlice({
   },
 });
 
-export const {SignIn, logOut, makeLoadingFalse, updateSitterStatus, updatePetAddStatus} = authSlice.actions;
+export const {SignIn,setToken, logOut, makeLoadingFalse, updateSitterStatus, updatePetAddStatus} = authSlice.actions;
 export default authSlice.reducer;
