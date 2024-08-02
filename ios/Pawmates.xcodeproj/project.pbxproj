@@ -32,9 +32,8 @@
 		FA84B9F32BCEFA8400528376 /* backGroundScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = FA84B9DE2BCEFA8400528376 /* backGroundScreen.png */; };
 		FA84B9F42BCEFA8400528376 /* typing-lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = FA84B9E02BCEFA8400528376 /* typing-lottie.json */; };
 		FA84B9F52BCEFA8400528376 /* intro_gif.gif in Resources */ = {isa = PBXBuildFile; fileRef = FA84B9E22BCEFA8400528376 /* intro_gif.gif */; };
-		FAAB1AB72C53D4A900E32D50 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAAB1AB62C53D4A900E32D50 /* GoogleService-Info.plist */; };
-		FAAB1AB82C53D4A900E32D50 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAAB1AB62C53D4A900E32D50 /* GoogleService-Info.plist */; };
 		FAC2F02A2ACC98F900E4CF53 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAC2F0292ACC98F900E4CF53 /* images.xcassets */; };
+		FAFC85842C542E06003B80E6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAFC85832C542E06003B80E6 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,7 +82,6 @@
 		FA84B9DE2BCEFA8400528376 /* backGroundScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backGroundScreen.png; sourceTree = "<group>"; };
 		FA84B9E02BCEFA8400528376 /* typing-lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "typing-lottie.json"; sourceTree = "<group>"; };
 		FA84B9E22BCEFA8400528376 /* intro_gif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = intro_gif.gif; sourceTree = "<group>"; };
-		FAAB1AB62C53D4A900E32D50 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FAC2F0292ACC98F900E4CF53 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = images.xcassets; path = ../images.xcassets; sourceTree = "<group>"; };
 		FAD805382AC3A5F600D2C61E /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		FAD805392AC3A5F600D2C61E /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
@@ -101,6 +99,8 @@
 		FAD805452AC3A5F600D2C61E /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		FAD805462AC3A5F600D2C61E /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		FAD805472AC3A5F600D2C61E /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		FAF20EB02C5A657500921AD7 /* Pawmates.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Pawmates.entitlements; path = Pawmates/Pawmates.entitlements; sourceTree = "<group>"; };
+		FAFC85832C542E06003B80E6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,8 +143,9 @@
 		13B07FAE1A68108700A75B9A /* Pawmates */ = {
 			isa = PBXGroup;
 			children = (
-				FAAB1AB62C53D4A900E32D50 /* GoogleService-Info.plist */,
+				FAF20EB02C5A657500921AD7 /* Pawmates.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+				FAFC85832C542E06003B80E6 /* GoogleService-Info.plist */,
 				FAC2F0292ACC98F900E4CF53 /* images.xcassets */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -370,7 +371,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAAB1AB82C53D4A900E32D50 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,7 +397,7 @@
 				FA84B9EF2BCEFA8400528376 /* logo.png in Resources */,
 				FA84B9F12BCEFA8400528376 /* PETWALKING.png in Resources */,
 				FA84B9F22BCEFA8400528376 /* BOARDING.png in Resources */,
-				FAAB1AB72C53D4A900E32D50 /* GoogleService-Info.plist in Resources */,
+				FAFC85842C542E06003B80E6 /* GoogleService-Info.plist in Resources */,
 				FA84B9E82BCEFA8400528376 /* HOUSESITTING.png in Resources */,
 				FA84B9E32BCEFA8400528376 /* Google_Icon.png in Resources */,
 			);
@@ -654,6 +654,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Pawmates/Pawmates.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = T2UNGVN9P9;
 				ENABLE_BITCODE = NO;
@@ -682,6 +683,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Pawmates/Pawmates.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = T2UNGVN9P9;
 				INFOPLIST_FILE = Pawmates/Info.plist;

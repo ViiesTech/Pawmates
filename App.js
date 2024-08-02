@@ -25,9 +25,9 @@ const App = () => {
     }, 2500);
   }, []);
 
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
+  // useEffect(() => {
+  //   SplashScreen.hide();
+  // }, []);
 
   if (loading) {
     return (
@@ -44,7 +44,8 @@ const App = () => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <SafeAreaView style={{flex: 1}}>
-          {AppState.currentState === 'active' && <Route />}
+          {/* {AppState.currentState === 'active' && } */}
+          <Route />
           <Toast />
         </SafeAreaView>
       </PersistGate>
